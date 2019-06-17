@@ -1,0 +1,102 @@
+﻿body {    
+    padding: 0.5%;
+    background-color: black;
+}
+
+/*------------------------HEADER-------------------------*/
+
+.header {        
+    height: 125px;
+    background-color: darkslateblue;
+    border: 1px solid black;
+    border-radius: 15px;
+    box-shadow: purple 2px 2px 5px, purple -2px 2px 5px, purple 2px -2px 5px, purple -2px -2px 5px,
+                purple 4px 4px 20px, purple -4px 4px 20px, purple 4px -4px 20px, purple -4px -4px 20px,     
+                purple 7px 7px 30px, purple -7px 7px 30px, purple 7px -7px 30px, purple -7px -7px 30px;
+}
+
+/*-----------------------END HEADER-----------------------*/
+
+/*-------------------------ASIDE--------------------------*/
+
+.aside {    
+    background-color: lightblue;    
+    margin-top: 1.5%;    
+    margin-bottom: 1.5%;    
+    width: 19%;
+    height: 450px;
+    border-radius: 15px;
+    box-shadow: purple 2px 2px 5px, purple -2px 2px 5px, purple 2px -2px 5px, purple -2px -2px 5px,
+                purple 4px 4px 20px, purple -4px 4px 20px, purple 4px -4px 20px, purple -4px -4px 20px, 
+                purple 7px 7px 30px, purple -7px 7px 30px, purple 7px -7px 30px, purple -7px -7px 30px,
+                inset 0px 0px 0px 2px black;    
+    overflow-y:auto;
+    overflow-x:hidden;
+    float: left;
+}
+
+/*-----------------------END ASIDE------------------------*/
+
+/*------------------------SECTION-------------------------*/
+
+.section {
+    background-color: beige;        
+    margin-top: 1.5%;
+    margin-left: 1.5%;
+    width: 79.5%;
+    height: 450px;      
+    border-radius: 15px;
+    box-shadow: purple 2px 2px 5px, purple -2px 2px 5px, purple 2px -2px 5px, purple -2px -2px 5px,
+                purple 4px 4px 20px, purple -4px 4px 20px, purple 4px -4px 20px, purple -4px -4px 20px, 
+                purple 7px 7px 30px, purple -7px 7px 30px, purple 7px -7px 30px, purple -7px -7px 30px,
+                inset 0px 0px 0px 2px black;
+    float: left;
+}
+/*-----------------------END SECTION-----------------------*/
+
+/*-------------------------FOOTER--------------------------*/
+
+.footer {
+    background-color: darkslateblue;        
+    height: 150px;
+    border: 1px solid black;        
+    border-radius: 15px;
+    box-shadow: purple 2px 2px 5px, purple -2px 2px 5px, purple 2px -2px 5px, purple -2px -2px 5px,
+                purple 4px 4px 20px, purple -4px 4px 20px, purple 4px -4px 20px, purple -4px -4px 20px, 
+                purple 7px 7px 30px, purple -7px 7px 30px, purple 7px -7px 30px, purple -7px -7px 30px;
+    clear: left;
+}
+
+/*-----------------------END FOOTER------------------------*/
+
+.title_of_page {
+    text-align: center;
+    color: gold;
+    font-size: 38px;
+    font-weight: bold;
+    font-family: 'Times New Roman', Times, serif;
+    text-shadow: 2px 2px 3px black, -2px 2px 3px black, 2px -2px 3px black;
+}
+
+.title-aside {
+    text-align: center;
+    font-size: 30px;
+    color: darkblue;
+    text-shadow: 1px 1px 3px #9d0707, -1px 1px 3px #9d0707, 1px -1px 3px #9d0707;
+}
+
+.text-p {
+    color: darkblue;
+    text-align: center;
+    font-weight: bold;
+    font-size: 17px;    
+    padding:0 10px 0 10px;
+}
+
+.text-aside {
+    text-align: center;
+    word-spacing: 10px;
+    font-size: 25px;
+    font-weight: bold;
+}
+
