@@ -100,3 +100,128 @@
     font-weight: bold;
 }
 
+/*-------------------Calculator--------------------*/
+
+.calc {
+    margin: 5px 0 0 15%;
+}
+
+            /*-----------BUTTONS-------------*/
+button {
+    background-color: gold;
+    color: forestgreen;
+    width: 50px;
+    height: 50px;
+    font-size: 28px;
+    font-family: 'Times New Roman', Times, serif;
+    border: 2px solid #927e14;
+    box-shadow: black 5px 6px 2px;
+    margin: 5px 0 0 5px;    
+    outline: none;
+    text-decoration-line: none;
+    text-decoration: none;        
+    padding: 0px;
+    transition: all ease 0.3s;
+}
+
+    button:hover {
+        background-color: burlywood;
+        color: blue;
+        box-shadow: black 3px 4px 2px;
+         outline: none;
+        text-decoration-line: none;
+        text-decoration: none;
+    }
+
+    button:active {
+        background-color: red;
+        color: black;
+        box-shadow: 1px 1px 2px black;
+        outline: none;
+        text-decoration-line: none;
+        text-decoration: none;
+    }
+
+    button:active, button:focus {
+    outline: none !important;
+
+    }
+    button::-moz-focus-inner {
+        border: 0 !important;
+    }
+            /*------------SCREEN------------*/
+
+.screen {
+    float: left;
+}
+
+.screen textarea{
+    background-color: azure;
+    color: blue;
+    width: 221px;
+    height: 55px;
+    font-size: 30px;
+    font-family: 'Times New Roman', Times, serif;        
+    border: 2px solid #927e14;
+    box-shadow: 5px 5px 2px black;
+    margin: 5px 5px 0 5px;
+}
+
+            /*-----------INFO SCREEN-----------*/
+
+.info-screen {
+    background-color: gold;
+    font-size: 22px;    
+    width: 223px;
+    height: 120px;
+    margin: 5px 0 0 0px;    
+    float: left;    
+    border: 2px solid #927e14;
+    box-shadow: black 5px 6px 2px;
+    white-space: nowrap;
+    overflow-y: hidden;
+    overflow-x: scroll, no-display;
+}
+
+    .info-screen div {
+        margin-top: 1px;
+        margin-left: 2px;
+        color: blueviolet;
+    }
+    .info-screen span#Bin {
+        margin-left: 5px;
+    }
+    .info-screen span#Oct {
+        margin-left: 5px;
+    }
+    .info-screen span#M {
+        font-size: 16px;
+        color: blue;
+    }
+
+            /*-----------OTHER------------*/
+
+.row-btns {
+    float: left;
+}
+
+.extended-mode {
+    float: left;
+    margin-left: 4px;    
+}
+.extended-mode button {
+    font-size: 26px;
+}
+
+.new-row-btns {
+    clear: left;    
+}
+
+#C, #DEL {
+    width: 109px;
+}
+
+.btn {
+    width: 227px;
+}
+/*-----------------END Calculator------------------*/
