@@ -7,7 +7,7 @@
     <script src="MyCalc.js"></script>
 </head>
 <body>
-    <header class="header">
+    <header class="header"> 
         <p class="title_of_page">My Calcuclatr</p>
     </header>
 
@@ -30,7 +30,7 @@
                     <textarea type="text" readonly></textarea>
                 </div>
                 <div>
-                    <textarea type="text" value="0" readonly></textarea>
+                    <textarea type="text" id="screen" value="0" readonly>0</textarea>
                 </div>
             </div>
             <div class="info-screen extended-mode">                
@@ -54,70 +54,69 @@
                     <button id="DEL">DEL</button>
                 </div>
                 <div class="extended-mode">
-                    <button>MC</button>
-                    <button>MR</button>
-                    <button>M+</button>
-                    <button>M-</button>
+                    <button id="MC">MC</button>
+                    <button id="MR">MR</button>
+                    <button id="Msum">M+</button>
+                    <button id="Msub">M-</button>
                 </div>
             </div>
             <div class="new-row-btns">
                 <div class="row-btns">
-                    <button>1</button>
-                    <button>2</button>
-                    <button>3</button>
-                    <button>+</button>
+                    <button id="b1">1</button>
+                    <button id="b2">2</button>
+                    <button id="b3">3</button>
+                    <button id="sum">+</button>
                 </div>
                 <div class="extended-mode">
-                    <button>x<sup>2</sup><sub></sub></button>
-                    <button>x<sup>3</sup><sub></sub></button>
-                    <button>x<sup>y</sup><sub></sub></button>
-                    <button>MS</button>
+                    <button id="Xdeg2">x<sup>2</sup><sub></sub></button>
+                    <button id="Xdeg3">x<sup>3</sup><sub></sub></button>
+                    <button id="XdegY">x<sup>y</sup><sub></sub></button>
+                    <button id="MS">MS</button>
                 </div>
             </div>
             <div class="new-row-btns">
                 <div class="row-btns">
-                    <button>4</button>
-                    <button>5</button>
-                    <button>6</button>
-                    <button>-</button>
+                    <button id="b4">4</button>
+                    <button id="b5">5</button>
+                    <button id="b6">6</button>
+                    <button id="sub">-</button>
                 </div>
                 <div class="extended-mode">
-                    <button>√</button>
-                    <button>10<sup>x</sup><sub></sub></button>
-                    <button><sup>1</sup>/<sub>x</sub></button>
-                    <button>n!</button>
+                    <button id="√">√</button>
+                    <button id="b10degX">10<sup>x</sup><sub></sub></button>
+                    <button id="b1divX"><sup>1</sup>/<sub>x</sub></button>
+                    <button id="nfactr">n!</button>
                 </div>
             </div>
             <div class="new-row-btns">
                 <div class="row-btns">
-                    <button>7</button>
-                    <button>8</button>
-                    <button>9</button>
-                    <button>*</button>
+                    <button id="b7">7</button>
+                    <button id="b8">8</button>
+                    <button id="b9">9</button>
+                    <button id="mult">*</button>
                 </div>
                 <div class="extended-mode">
-                    <button>log</button>
-                    <button>ln</button>
-                    <button>e<sup>x</sup><sub></sub></button>
-                    <button>mod</button>
+                    <button id="log">log</button>
+                    <button id="ln">ln</button>
+                    <button id="edegX">e<sup>x</sup><sub></sub></button>
+                    <button id="mod">mod</button>
                 </div>
             </div>
             <div class="new-row-btns">
                 <div class="row-btns">
-                    <button>.</button>
-                    <button>0</button>
-                    <button>=</button>
-                    <button>÷</button>
+                    <button id="dot">.</button>
+                    <button id="b0">0</button>
+                    <button id="result">=</button>
+                    <button id="div">÷</button>
                 </div>
                 <div class="extended-mode">
-                    <button>sin</button>
-                    <button>cos</button>
-                    <button>tan</button>
-                    <button>π</button>
+                    <button id="sin">sin</button>
+                    <button id="cos">cos</button>
+                    <button id="tan">tan</button>
+                    <button id="bπ">π</button>
                 </div>
             </div>
-            <button class="btn">button</button>
-            <button class="btn">button</button>
+            <button class="btn">Перейти в простой режим</button>            
         </div>
     </section>
 
