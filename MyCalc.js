@@ -1,11 +1,12 @@
 ﻿(function () {
     window.onload = function () {
         
-        var fitstArg = undefined;   // First argument of arithetic operation.
+        var firstArg = undefined;   // First argument of arithetic operation.
         var secondArg = undefined;  // Second argument of arithetic operation.
         var data_screen;             
-        var signAct = "";           // This argument retains a sign of an arithmetic operation.
-         
+        var sign = "";              // This argument contains a sign of an arithmetic operation.
+        var signAct = "";           // This argument contains an arithmetic action.
+        var signTrue = 0;           // An arithmetic operation has been pushed or not.
 
         // This is Array of objects buttons
         var buttons = {
@@ -14,12 +15,23 @@
                 title: "=",                
                 onClickHandler: function (e) {                    
                     return function () {
-                    
+                        if (firstArg != undefined && signAct != "") {
+                            if (secondArg == undefined) {
+                                secondArg = getId("screen").textContent;
+                            } 
+                            
+                            console.log(signAct[0]);
+                            console.log(firstArg);
+                            console.log(secondArg);
+                            firstArg = count(firstArg, secondArg, signAct)
+                            getId("screen").innerHTML = firstArg;                            
+                            signTrue = 1;                            
+                        }
                     };
                 }
             },
 
-            //#region These Buttons only add or remove a value on the calculator screen.
+            //#region region №1 These Buttons only add or remove a value on the calculator screen.
             
             "b1": {
                 title: "1",
@@ -136,12 +148,14 @@
                 title: "DEL",                
                 onClickHandler: function (e) {                    
                     return function () {
-                        var val = getId("screen").textContent;                        
-                        val = val.slice(0, val.length - 1);                        
-                        if (val != "") {
-                            getId("screen").innerHTML = val;
-                        } else {
-                            getId("screen").innerHTML = "0";
+                        if (signTrue == 0) {
+                            var val = getId("screen").textContent;
+                            val = val.slice(0, val.length - 1);
+                            if (val != "") {
+                                getId("screen").innerHTML = val;
+                            } else {
+                                getId("screen").innerHTML = "0";
+                            }
                         }
                     };
                 }
@@ -151,8 +165,10 @@
                 onClickHandler: function (e) {                    
                     return function () {
                         getId("screen").innerHTML = "0";
-                        firtstArg = undefined;
-                        signAct = "";                        
+                        firstArg = undefined;
+                        secondArg = undefined;
+                        sign = "";
+                        signAct = "";                           
                     };
                 }
             },
@@ -169,7 +185,7 @@
 
             //#endregion
 
-            //#region These are buttons of arithmetic operations.
+            //#region region №2 These are buttons of arithmetic operations.
             
             // После нажатия этих кнопок введённое число на экран запоминается в параметре first
             // после чего начинается набор второго числа для выражения в параметр second.
@@ -182,7 +198,7 @@
                 onClickHandler: function (e) {
                     var self = this.title
                     return function () {
-                        
+                        arithmetic(self);
                     };
                 }
             },
@@ -190,8 +206,8 @@
                 title: "-",
                 onClickHandler: function (e) {
                     var self = this.title
-                    return function () {
-                        
+                    return function () {                        
+                        arithmetic(self);
                     };
                 }
             },
@@ -200,7 +216,7 @@
                 onClickHandler: function (e) {
                     var self = this.title
                     return function () {
-                        
+                        arithmetic(self);
                     };
                 }
             },
@@ -209,14 +225,14 @@
                 onClickHandler: function (e) {
                     var self = this.title
                     return function () {
-                        
+                        arithmetic(self);
                     };
                 }
             },
 
             //#endregion
             
-            //#region These are buttons of functions.
+            //#region region №3 These are buttons of functions.
 
             // По нажатию этих кнопок проиходт вычесление аргумента first (содержимого экрана)
             // Получается результат и он же записывается обратно в аргумент first.
@@ -337,7 +353,7 @@
 
             //#endregion
             
-            //#region These are service functions.
+            //#region region №4 These are service functions.
 
             "MC": {
                 title: "MC",
@@ -393,13 +409,64 @@
             document.querySelector("#" + key).onclick = buttons[key].onClickHandler();
         }
 
-        // Add a sign to screen of calculator
+        // Add a sign to screen of calculator (region №1)
         function addSign(val) {
-            if (getId("screen").textContent != "0" || val == ".") {
+            if ((getId("screen").textContent != "0" || val == ".") && signTrue == 0) {
                 document.getElementById("screen").innerHTML += val;
             } else {
                 document.getElementById("screen").innerHTML = val;
+                signTrue = 0;
             }
+            secondArg = undefined;
+        }
+
+        // These are arithmetic functions (region №2)
+        function arithmetic(sign) {
+            if (signTrue == 1 && secondArg == undefined) {
+                signAct = sign;
+                return;
+            }
+
+            var scr = getId("screen").textContent;
+
+            if (firstArg == undefined || secondArg != undefined) {   
+                firstArg = scr;                
+                signAct = sign;
+                signTrue = 1;
+                secondArg = undefined;
+            }
+            else if (signAct != "") {
+                firstArg = count(firstArg, scr, signAct);
+                getId("screen").innerHTML = firstArg;                
+                signAct = sign;
+                signTrue = 1;
+            }
+        }
+
+        function count(x, y, sign) {
+            switch (sign) {
+                case "+": {
+                    return cleanUp(Number(x) + Number(y));                    
+                }
+                case "-": {
+                    return cleanUp(Number(x) - Number(y));
+                }
+                case "*": {
+                    return cleanUp(Number(x) * Number(y));
+                }
+                case "/": {
+                    if (y == 0) {
+                        return undefined;
+                    } else {                        
+                        return cleanUp(Number(x) / Number(y));
+                    }
+                }
+            }
+        }
+
+        // This is function for correcting existing problems with floating point.
+        function cleanUp(number) {
+            return parseFloat((parseFloat(number).toPrecision(12)));
         }
     }
 })();
