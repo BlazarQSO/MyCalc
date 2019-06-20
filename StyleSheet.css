@@ -166,6 +166,9 @@ button {
     box-shadow: 5px 5px 2px black;
     margin: 5px 5px 0 5px;
     text-align: right;
+    white-space: nowrap;
+    overflow-y: hidden;
+    overflow-x: scroll, no-display;
 }
 
             /*-----------INFO SCREEN-----------*/
