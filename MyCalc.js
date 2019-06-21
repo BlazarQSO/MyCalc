@@ -1,12 +1,17 @@
 ﻿(function () {
     window.onload = function () {
         
-        var firstArg = undefined;   // First argument of arithetic operation.
-        var secondArg = undefined;  // Second argument of arithetic operation.
-        var data_screen;             
-        var sign = "";              // This argument contains a sign of an arithmetic operation.
-        var signAct = "";           // This argument contains an arithmetic action.
-        var signTrue = 0;           // An arithmetic operation has been pushed or not.
+        var firstArg = undefined;       // First argument of arithmetic operation.
+        var secondArg = undefined;      // Second argument of arithmetic operation.
+        var firstArgDiff = undefined;   // First argument of difficult arithmetic operation.
+        
+        var sign = "";                  // This argument contains a sign of an arithmetic operation.
+        var signAct = "";               // This argument contains an arithmetic action.
+        var signActDiff = "";           // This argument contains a difficult arithmetic action.
+        var signTrue = 0;               // An arithmetic operation has been pushed or not.
+        var signMark = "";
+
+        var repeatScreen = "";
 
         // This is Array of objects buttons
         var buttons = {
@@ -15,14 +20,37 @@
                 title: "=",                
                 onClickHandler: function (e) {                    
                     return function () {
-                        if (firstArg != undefined && signAct != "") {
+                        if ((firstArg != undefined && signAct != "") || firstArgDiff != undefined) {
                             if (secondArg == undefined) {
                                 secondArg = getId("screen").textContent;
                             } 
                             
-                            firstArg = count(firstArg, secondArg, signAct)
-                            getId("screen").innerHTML = firstArg;                            
-                            signTrue = 1;                            
+                            if (signActDiff == "") {
+                                firstArg = count(firstArg, secondArg, signAct)
+                                getId("screen").innerHTML = firstArg;
+                                binOctHex(firstArg);
+                                signTrue = 1;
+                                signMark = "=";
+                            }
+                            else {
+                                if (firstArg != undefined && signAct != "") {
+                                    secondArg = count(firstArgDiff, getId("screen").textContent, signActDiff);
+                                    firstArg = count(firstArg, secondArg, signAct);
+                                    getId("screen").innerHTML = firstArg;
+                                    binOctHex(firstArg);
+                                    firstArgDiff = undefined;
+                                    signActDiff = "";                                    
+                                    signTrue = 1;
+                                    signMark = "=";
+                                }
+                                else {
+                                    firstArgDiff = count(firstArgDiff, secondArg, signActDiff)
+                                    getId("screen").innerHTML = firstArgDiff;
+                                    binOctHex(firstArgDiff);
+                                    signTrue = 1;
+                                    signMark = "=";
+                                }                                
+                            }
                         }
                     };
                 }
@@ -162,10 +190,15 @@
                 onClickHandler: function (e) {                    
                     return function () {
                         getId("screen").innerHTML = "0";
+                        getId("repeatScreen").innerHTML = "";
                         firstArg = undefined;
                         secondArg = undefined;
+                        firstArgDiff = undefined;
                         sign = "";
-                        signAct = "";                           
+                        signAct = "";
+                        signActDiff = "";
+                        signMark = "";
+                        signTrue = 0;
                     };
                 }
             },
@@ -213,7 +246,7 @@
                 }
             },
             "div": {
-                title: "/",                
+                title: "÷",                
                 onClickHandler: function (e) {
                     var self = this.title
                     return function () {
@@ -409,17 +442,32 @@
             if ((getId("screen").textContent != "0" || val == ".")
                 && signTrue == 0 && arguments[1] != "π")
             {
-                document.getElementById("screen").innerHTML += val;
-            } else {
+                getId("screen").innerHTML += val;
+                binOctHex(getId("screen").textContent);
+            }
+            else {
                 document.getElementById("screen").innerHTML = val;
+                binOctHex(val);
                 signTrue = 0;
             }
+                        
             secondArg = undefined;
+///////////                        
+            getId("repeatScreen").innerHTML += val;
         }
 
         // These are arithmetic operations (region №2)
         function arithmetic(sign) {
-            if (signTrue == 1 && secondArg == undefined) {
+            if (signMark == "=") {
+                firstArg = undefined;
+                firstArgDiff = undefined;
+                signActDiff = "";        
+                signAct = "";
+                signMark = "";
+            }
+
+            if (signTrue == 1 && secondArg == undefined && signActDiff == "") {
+                funRScreen(signAct, sign);
                 signAct = sign;
                 return;
             }
@@ -432,11 +480,33 @@
                 signTrue = 1;
                 secondArg = undefined;
             }
-            else if (signAct != "") {
+            else if ((signAct != "" && signActDiff == "") || (signTrue == 1 && signActDiff != "")) {
                 firstArg = count(firstArg, scr, signAct);
                 getId("screen").innerHTML = firstArg;                
                 signAct = sign;
                 signTrue = 1;
+
+                signActDiff = "";
+                firstArgDiff = undefined;
+            }
+            else if (signActDiff != "") {
+                firstArgDiff = count(firstArgDiff, getId("screen").textContent, signActDiff);
+                firstArg = count(firstArg, firstArgDiff, signAct);
+                getId("screen").innerHTML = firstArg;                
+                firstArgDiff = undefined;
+                signActDiff = "";
+                signAct = sign;
+                signTrue = 1;
+            }
+                        
+            binOctHex(getId("screen").textContent);
+
+            if (sign == "*" || sign == "÷") {
+                var temp = "(" + getId("repeatScreen").textContent + ")" + sign;
+                getId("repeatScreen").innerHTML = temp;
+            }
+            else {
+                getId("repeatScreen").innerHTML += sign;
             }
         }
 
@@ -445,13 +515,38 @@
             var src = getId("screen").textContent;
             var result = count(src, undefined, func);
             getId("screen").innerHTML = result;
+
+            binOctHex(result);
         }
 
         // These are difficult arithmetic functions (region №3 x^y, mod, y√x, %)
-        function arithmeticFuncDiff(sign) {
-            if (firstArg == undefined || signAct == 1) {
-                arithmetic(sign);
+        function arithmeticFuncDiff(sign) {                 
+            if (signMark == "=") {
+                firstArg = undefined;
+                firstArgDiff = undefined;
+                signAct = "";
+                signActDiff = "";                
+                signMark = "";
             }
+
+            //if (signTrue == 1 && secondArg == undefined) {
+            //    signActDiff = sign;
+            //    return;
+            //}
+
+            if (signActDiff == "" || (signTrue == 1 && secondArg == undefined)) {
+                firstArgDiff = getId("screen").textContent;
+                signActDiff = sign;
+                signTrue = 1;
+            }
+            else if (signActDiff != "") {                
+                firstArgDiff = count(firstArgDiff, getId("screen").textContent, signActDiff);                
+                getId("screen").innerHTML = firstArgDiff;
+                signActDiff = sign;
+                signTrue = 1;
+            }
+
+            binOctHex(getId("screen").textContent);
         }
 
         function count(x, y, sign) {
@@ -465,7 +560,7 @@
                 case "*": {
                     return cleanUp(Number(x) * Number(y));
                 }
-                case "/": {
+                case "÷": {
                     if (y != 0) {
                         return cleanUp(Number(x) / Number(y)); 
                     } else {                        
@@ -520,7 +615,7 @@
                 }
             }
         }
-
+        
         // #region n!        
         function factorial(n) {            
             if (n % 1 == 0 && n < 0) {
@@ -601,6 +696,50 @@
         //#endregion
         
         //#region These are auxiliary functions 
+
+        // Add a data to fields Bin Oct Hex.
+        function binOctHex(val) {
+            let numDec = Number(val);
+            getId("Bin").innerHTML = +(numDec).toString(2);
+            getId("Oct").innerHTML = +(numDec).toString(8);
+            getId("Hex").innerHTML = numDec.toString(16);
+        }
+
+        // This function adds all operations to the second screen.
+        function funRScreenExt(symbol, x, res) {
+            if (x[x.length - 1] == ".") {
+                x = x.slice(0, x.length - 1);
+            }
+            if (repeatScreen == "") {
+                Id("screenRepeat").value += symbol + "(" + x + ")";
+                repeatScreen = symbol + "(" + x + ")";                               
+            }
+            else {
+                var screenR = getId("repeatScreen").value;
+                screenR = screenR.slice(0, screenR.length - repeatScreen.length);
+                getId("repeatScreen").value = screenR + symbol + "(" + repeatScreen + ")";
+                extended = symbol + "(" + repeatScreen + ")";
+            }
+        }
+
+        function funRScreen(symbol, change) {
+            if ((symbol == "*" || symbol == "÷") && (change == "+" || change == "-")) {
+                var temp = getId("repeatScreen").textContent;
+                temp = temp.slice(1, temp.length - 2) + change;
+                getId("repeatScreen").innerHTML = temp;
+            }
+            else if ((symbol == "+" || symbol == "-") && (change == "*" || change == "÷")) {
+                var temp = getId("repeatScreen").textContent;
+                temp = "(" + temp.slice(0, temp.length - 1) + ")" + change;
+                getId("repeatScreen").innerHTML = temp;
+            }
+            else {
+                var temp = getId("repeatScreen").textContent;
+                temp = temp.slice(0, temp.length - 1) + change;
+                getId("repeatScreen").innerHTML = temp;
+            }
+        }
+
 
         var getId = function (id) {
             return document.getElementById(id);
