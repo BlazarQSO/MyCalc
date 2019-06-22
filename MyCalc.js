@@ -741,9 +741,11 @@
                 btn.innerHTML = "Extended";
                 
                 getId("moveDiv").style.width = "223px";
-
-                var mod = getId("mod");
-                mod.style.display = "none";
+                getId("mod").style.display = "none";
+                var info = getId("info");
+                info.style.height = "0";
+                info.style.width = "0";
+                info.style.border = "none";                
 
                 var list = document.getElementsByClassName("extended-mode");
                 for (var i = 0; i < list.length; i++) {
@@ -756,9 +758,11 @@
                 btn.innerHTML = "Simply";
                 
                 getId("moveDiv").style.width = "458px";
-
-                var mod = getId("mod");
-                mod.style.display = "block";
+                getId("mod").style.display = "block";
+                var info = getId("info");
+                info.style.height = "122px";
+                info.style.width = "223px";
+                info.style.border = "2px solid #927e14";
 
                 var list = document.getElementsByClassName("extended-mode");
                 for (var i = 0; i < list.length; i++) {
@@ -850,8 +854,8 @@
 
             function moveHandler(e) {
                 if (!e) e = window.event;
-
-                elem.style.left = (e.clientX - deltaX) + "px";
+                
+                elem.style.left = (e.clientX - deltaX) + "px";                
                 elem.style.top = (e.clientY - deltaY) + "px";
             }
 

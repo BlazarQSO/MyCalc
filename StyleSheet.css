@@ -1,7 +1,10 @@
-﻿body {    
+﻿body {
     padding: 0.5%;
     background-color: black;
+    overflow-x: hidden;
+    white-space: nowrap;
 }
+/*change mark*/
 
 /*------------------------HEADER-------------------------*/
 
@@ -24,7 +27,7 @@
     margin-top: 1.5%;    
     margin-bottom: 1.5%;    
     width: 19%;
-    height: 510px;
+    height: 515px;
     border-radius: 15px;
     box-shadow: purple 2px 2px 5px, purple -2px 2px 5px, purple 2px -2px 5px, purple -2px -2px 5px,
                 purple 4px 4px 20px, purple -4px 4px 20px, purple 4px -4px 20px, purple -4px -4px 20px, 
@@ -44,7 +47,7 @@
     margin-top: 1.5%;
     margin-left: 1.5%;
     width: 79.5%;
-    height: 510px;      
+    height: 515px;      
     border-radius: 15px;
     box-shadow: purple 2px 2px 5px, purple -2px 2px 5px, purple 2px -2px 5px, purple -2px -2px 5px,
                 purple 4px 4px 20px, purple -4px 4px 20px, purple 4px -4px 20px, purple -4px -4px 20px, 
@@ -77,7 +80,6 @@
     font-weight: bold;
     font-family: 'Times New Roman', Times, serif;
     text-shadow: 2px 2px 3px black, -2px 2px 3px black, 2px -2px 3px black;
-
     -moz-user-select: none;
     -khtml-user-select: none;
     user-select: none;
@@ -88,7 +90,6 @@
     font-size: 30px;
     color: darkblue;
     text-shadow: 1px 1px 3px #9d0707, -1px 1px 3px #9d0707, 1px -1px 3px #9d0707;
-
     -moz-user-select: none;
     -khtml-user-select: none;
     user-select: none;
@@ -98,8 +99,8 @@
     color: darkblue;
     text-align: center;
     font-weight: bold;
-    font-size: 17px;    
-    padding:0 10px 0 10px;
+    font-size: 17px;
+    padding: 0 10px 0 10px;
 }
 
 .text-aside {
@@ -112,7 +113,7 @@
 /*-------------------Calculator--------------------*/
 
 .calc {
-    margin: 5px 0 0 15%;
+    padding: 0px;
     margin: 0px;
 }
 
@@ -121,32 +122,30 @@ button, #moveDiv {
     background-color: gold;
     color: forestgreen;
     width: 50px;
-    height: 50px;
+    height: 50px;    
     font-size: 28px;
     font-family: 'Times New Roman', Times, serif;
     border: 2px solid #927e14;
-    box-shadow: black 5px 6px 2px;
-    margin: 5px 0 0 5px;    
+    box-shadow: black 5px 6px 2px;    
     outline: none;
     text-decoration-line: none;
     text-decoration: none;        
-    padding: 0px;
-    transition: all ease 0.3s;
-
+    padding: 0px;    
+    transition: color 0.3s, background-color 0.3s, box-shadow 0.3s;
     -moz-user-select: none;
     -khtml-user-select: none;
     user-select: none;      
+    margin-left: 5px;
+    margin-bottom: 5px;
 }
-
     button:hover {
         background-color: burlywood;
         color: blue;
         box-shadow: black 3px 4px 2px;
-         outline: none;
+        outline: none;
         text-decoration-line: none;
         text-decoration: none;
     }
-
     button:active {
         background-color: red;
         color: black;
@@ -155,63 +154,64 @@ button, #moveDiv {
         text-decoration-line: none;
         text-decoration: none;
     }
-
     button:active, button:focus {
-    outline: none !important;
-
+        outline: none !important;
     }
     button::-moz-focus-inner {
         border: 0 !important;
     }
             /*------------SCREEN------------*/
 
-.screen {
+.screen {    
     float: left;
 }
 
 .screen textarea{
     background-color: azure;
     color: blue;
-    width: 221px;
-    height: 55px;
+    width: 223px;    
+    height: 55px;    
     max-width: 458px;
-    min-width: 221px;
+    min-width: 223px;
     min-height: 55px;
     max-height: 55px;
     font-size: 30px;
     font-family: 'Times New Roman', Times, serif;        
     border: 2px solid #927e14;
-    box-shadow: 5px 5px 2px black;
-    margin: 5px 5px 0 5px;
+    box-shadow: 5px 5px 2px black;    
     text-align: right;
     white-space: nowrap;
     overflow-y: hidden;
-    overflow-x: scroll, no-display;        
-    
+    overflow-x: scroll, no-display;   
     -moz-user-select: none;
     -khtml-user-select: none;
     user-select: none; 
+    margin: 0;
+    padding: 0;
+    margin-left: 5px;  
+    margin-right: -5px;  
+    margin-bottom: 4px;
 }
 
             /*-----------INFO SCREEN-----------*/
 
 .info-screen {
     background-color: gold;
-    font-size: 22px;    
+    font-size: 22px;
     width: 223px;
-    height: 120px;
-    margin: 5px 0 0 0px;    
-    padding: 0;
-    float: left;    
+    height: 122px;
     border: 2px solid #927e14;
     box-shadow: black 5px 6px 2px;
     white-space: nowrap;
     overflow-y: hidden;
     overflow-x: scroll, no-display;
-    
     -moz-user-select: none;
     -khtml-user-select: none;
-    user-select: none; 
+    user-select: none;
+    margin: 0;
+    padding: 0;
+    margin-left: 15px;
+    margin-bottom: 4px;
 }
 
     .info-screen div {
@@ -234,16 +234,16 @@ button, #moveDiv {
 
 .row-btns {
     float: left;
+    margin-right: 4px;
 }
 
-.extended-mode {
-    float: left;
-    margin-left: 4px;    
+.extended-mode {  
     display: block;
 }
-.extended-mode button {
-    font-size: 26px;
-}
+
+    .extended-mode button {
+        font-size: 26px;
+    }
 
 .new-row-btns {
     clear: left;    
@@ -254,9 +254,9 @@ button, #moveDiv {
 }
 
 #btn {    
-    width: 345px;
-    margin-left: 5px;
+    width: 345px;    
     float: left;
+    transition: width 0.4s;
 }
 
 #mod {
@@ -271,7 +271,7 @@ button, #moveDiv {
 }
 
 #moveCalc {
-    position: absolute;
+    position: absolute;    
 }
 
 #moveDiv {
@@ -279,5 +279,11 @@ button, #moveDiv {
     height: 25px;
     width: 458px;
     font-size: 22px;
+    margin-top: 7px;
 }
+
+.inblock {
+    display: inline-block;
+}
+
 /*-----------------END Calculator------------------*/

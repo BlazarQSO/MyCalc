@@ -13,7 +13,8 @@
 
     <aside class="aside">
         <h2 class="title-aside">About MyCalc</h2>
-        <p class="text-p">This is my calculator with expanded engineering functions.</p>
+        <p class="text-p">This is my calculator with</p>
+        <p class="text-p"> expanded engineering functions.</p>
         <p class="text-p">It includes functions:</p>
         <div class="text-aside">
             <p>+, -, *, ÷, √, mod, n!</p>            
@@ -26,16 +27,16 @@
     <section class="section">
         <div id="move"></div>
         <div class="calc" id="moveCalc">
-            <div id="moveDiv">Move</div>
-            <div class="screen">
+            <div id="moveDiv">Move</div>           
+            <div class="screen inblock">
                 <div>
                     <textarea type="text" id="repeatScreen" readonly></textarea>
                 </div>
                 <div>
                     <textarea type="text" id="screen" readonly>0</textarea>
                 </div>
-            </div>
-            <div class="info-screen extended-mode">
+            </div>    
+            <div class="info-screen inblock" id="info">
                 <div>
                     <label>Bin: <span id="Bin">0</span></label>
                 </div>
@@ -47,9 +48,8 @@
                 </div>
                 <div>
                     <label>M: <span id="M">0</span></label>
-                </div>                
+                </div>               
             </div>
-            <br style="clear: left" />
             <div>
                 <div class="row-btns">
                     <button id="C">C</button>
