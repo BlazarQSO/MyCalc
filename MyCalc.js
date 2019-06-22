@@ -277,17 +277,6 @@
                     };
                 }
             },
-            
-            "XdegY": {
-                title: "x^y",
-                onClickHandler: function (e) {                   
-                    var self = this.title;
-                    return function () {
-                        arithmeticFuncDiff(self);
-                    };
-                }
-            },
-            
             "√": {
                 title: "√",
                 onClickHandler: function (e) {                    
@@ -350,16 +339,7 @@
                         arithmeticFunc(self);
                     };
                 }
-            },
-            "mod": {
-                title: "mod",
-                onClickHandler: function (e) {                    
-                    var self = this.title;
-                    return function () {
-                        arithmeticFunc(self);
-                    };
-                }
-            },
+            },         
             "sin": {
                 title: "sin",
                 onClickHandler: function (e) {                    
@@ -388,6 +368,42 @@
                 }
             },
 
+            "XdegY": {
+                title: "x^y",
+                onClickHandler: function (e) {
+                    var self = this.title;
+                    return function () {
+                        arithmeticFuncDiff(self);
+                    };
+                }
+            },
+            "xSqrtY": {
+                title: "y√x",
+                onClickHandler: function (e) {
+                    var self = this.title;
+                    return function() {
+                        arithmeticFuncDiff(self);
+                    }
+                }
+            },
+            "mod": {
+                title: "mod",
+                onClickHandler: function (e) {
+                    var self = this.title;
+                    return function () {
+                        arithmeticFuncDiff(self);
+                    };
+                }
+            },
+            "perc": {
+                title: "%",
+                onClickHandler: function (e) {
+                    var self = this.title;
+                    return function () {
+                        arithmeticFunc(self);
+                    }
+                }
+            },
             //#endregion
             
             //#region region №4 These are service functions.
@@ -433,6 +449,14 @@
                 }
             },
 
+            "btn": {
+                title: "btn",
+                onClickHandler: function (e) {
+                    return function () {
+                        extendedMode();
+                    }
+                }
+            }
             //#endregion
             
         }
@@ -513,7 +537,7 @@
         // These are arithmetic functions (region №3)
         function arithmeticFunc(func) {
             var src = getId("screen").textContent;
-            var result = count(src, undefined, func);
+            var result = count(src, firstArg, func);
             getId("screen").innerHTML = result;
 
             binOctHex(result);
@@ -600,10 +624,7 @@
                 }
                 case "e^x": {
                     return cleanUp(Math.exp(x));
-                }
-                case "mod": {
-                    return;
-                }
+                }                
                 case "sin": {
                     return trigonSin(x);
                 }
@@ -612,6 +633,20 @@
                 }
                 case "tan": {
                     return trigonTan(x);
+                }
+                case "y√x": {
+                    if (x < 0 && x % 2 == 1) {
+                        return -Math.pow(-x, 1 / y);
+                    }
+                    else {
+                        return Math.pow(x, 1 / y);
+                    }
+                }
+                case "mod": {
+                    return x % y;
+                }
+                case "%": {
+                    return y * x / 100;
                 }
             }
         }
@@ -697,6 +732,37 @@
         
         //#region These are auxiliary functions 
 
+        // Extended mode
+        function extendedMode() {
+            var btn = getId("btn");
+            if (btn.className == "extended") {
+                btn.className = "notExtended";
+                btn.style.width = "168px";
+                btn.innerHTML = "Extended";
+                
+                var mod = getId("mod");
+                mod.style.display = "none";
+
+                var list = document.getElementsByClassName("extended-mode");
+                for (var i = 0; i < list.length; i++) {
+                    list[i].style.display = "none";
+                }
+            }
+            else {
+                btn.className = "extended";
+                btn.style.width = "345px";
+                btn.innerHTML = "Simply";
+                
+                var mod = getId("mod");
+                mod.style.display = "block";
+
+                var list = document.getElementsByClassName("extended-mode");
+                for (var i = 0; i < list.length; i++) {
+                    list[i].style.display = "block";
+                }
+            }
+        }
+
         // Add a data to fields Bin Oct Hex.
         function binOctHex(val) {
             let numDec = Number(val);
@@ -739,8 +805,7 @@
                 getId("repeatScreen").innerHTML = temp;
             }
         }
-
-
+ 
         var getId = function (id) {
             return document.getElementById(id);
         }
@@ -749,7 +814,7 @@
         for (var key in buttons) {
             document.querySelector("#" + key).onclick = buttons[key].onClickHandler();
         }
-
+        
         // This is function for correcting existing problems with floating point.
         function cleanUp(number) {
             return parseFloat((parseFloat(number).toPrecision(12)));

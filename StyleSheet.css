@@ -24,7 +24,7 @@
     margin-top: 1.5%;    
     margin-bottom: 1.5%;    
     width: 19%;
-    height: 450px;
+    height: 480px;
     border-radius: 15px;
     box-shadow: purple 2px 2px 5px, purple -2px 2px 5px, purple 2px -2px 5px, purple -2px -2px 5px,
                 purple 4px 4px 20px, purple -4px 4px 20px, purple 4px -4px 20px, purple -4px -4px 20px, 
@@ -44,7 +44,7 @@
     margin-top: 1.5%;
     margin-left: 1.5%;
     width: 79.5%;
-    height: 450px;      
+    height: 480px;      
     border-radius: 15px;
     box-shadow: purple 2px 2px 5px, purple -2px 2px 5px, purple 2px -2px 5px, purple -2px -2px 5px,
                 purple 4px 4px 20px, purple -4px 4px 20px, purple 4px -4px 20px, purple -4px -4px 20px, 
@@ -160,6 +160,10 @@ button {
     color: blue;
     width: 221px;
     height: 55px;
+    max-width: 458px;
+    min-width: 221px;
+    min-height: 55px;
+    max-height: 55px;
     font-size: 30px;
     font-family: 'Times New Roman', Times, serif;        
     border: 2px solid #927e14;
@@ -179,6 +183,7 @@ button {
     width: 223px;
     height: 120px;
     margin: 5px 0 0 0px;    
+    padding: 0;
     float: left;    
     border: 2px solid #927e14;
     box-shadow: black 5px 6px 2px;
@@ -188,7 +193,7 @@ button {
 }
 
     .info-screen div {
-        margin-top: 1px;
+        margin-top: 0;
         margin-left: 2px;
         color: blueviolet;
     }
@@ -212,6 +217,7 @@ button {
 .extended-mode {
     float: left;
     margin-left: 4px;    
+    display: block;
 }
 .extended-mode button {
     font-size: 26px;
@@ -225,7 +231,21 @@ button {
     width: 109px;
 }
 
-.btn {    
-    width: 463px;
+#btn {    
+    width: 345px;
+    margin-left: 5px;
+    float: left;
 }
+
+#mod {
+    font-size: 25px;
+    display: block;
+    float: left;    
+    margin-left: 9px;
+}
+
+#perc {
+    margin-left: 9px;
+}
+
 /*-----------------END Calculator------------------*/
