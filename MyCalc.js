@@ -10,7 +10,9 @@
         var signActDiff = "";           // This argument contains a difficult arithmetic action.
         var signTrue = 0;               // An arithmetic operation has been pushed or not.
         var signMark = "";
-
+        
+        var memory = undefined;         
+            
         var repeatScreen = "";
 
         // This is Array of objects buttons
@@ -412,7 +414,8 @@
                 title: "MC",
                 onClickHandler: function (e) {                    
                     return function () {
-
+                        memory = undefined;
+                        getId("M").innerHTML = "0";
                     };
                 }
             },
@@ -420,7 +423,12 @@
                 title: "MR",
                 onClickHandler: function (e) {                    
                     return function () {
-
+                        if (memory != undefined) {
+                            getId("screen").innerHTML = memory;
+                            binOctHex(memory);
+                            signTrue = 0;
+                            secondArg = undefined;                            
+                        }
                     };
                 }
             },
@@ -428,7 +436,13 @@
                 title: "M+",
                 onClickHandler: function (e) {                    
                     return function () {
-
+                        if (memory == undefined) {
+                            memory = Number(getId("screen").textContent);
+                            getId("M").innerHTML = memory;
+                        } else {
+                            memory = Number(memory) + Number(getId("screen").textContent);
+                            getId("M").innerHTML = memory;
+                        }
                     };
                 }
             },
@@ -436,7 +450,13 @@
                 title: "M-",
                 onClickHandler: function (e) {                    
                     return function () {
-
+                        if (memory == undefined) {
+                            memory = Number(0) - Number(getId("screen").textContent);
+                            getId("M").innerHTML = memory;
+                        } else {
+                            memory = Number(memory) - Number(getId("screen").textContent);
+                            getId("M").innerHTML = memory;
+                        }
                     };
                 }
             },
@@ -444,7 +464,8 @@
                 title: "MS",
                 onClickHandler: function (e) {                    
                     return function () {
-
+                        memory = Number(getId("screen").textContent);
+                        getId("M").innerHTML = memory;
                     };
                 }
             },
