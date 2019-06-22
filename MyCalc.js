@@ -13,7 +13,7 @@
         
         var memory = undefined;         
             
-        var repeatScreen = "";
+        var signPrevScr = "";           // This argument is a previous sign for correct data input.
 
         // This is Array of objects buttons
         var buttons = {
@@ -54,6 +54,8 @@
                                 }                                
                             }
                         }
+                        getId("repeatScreen").innerHTML = "";
+                        signPrevScr = "";
                     };
                 }
             },
@@ -201,6 +203,8 @@
                         signActDiff = "";
                         signMark = "";
                         signTrue = 0;
+                        getId("repeatScreen").innerHTML = "";
+                        signPrevScr = "";
                     };
                 }
             },
@@ -497,8 +501,6 @@
             }
                         
             secondArg = undefined;
-///////////                        
-            getId("repeatScreen").innerHTML += val;
         }
 
         // These are arithmetic operations (region №2)
@@ -519,20 +521,23 @@
 
             var scr = getId("screen").textContent;
 
-            if (firstArg == undefined || secondArg != undefined) {   
+            if (firstArg == undefined || secondArg != undefined) {
+                funRScreenSimple(scr, sign, signAct);                
+
                 firstArg = scr;                
                 signAct = sign;
-                signTrue = 1;
-                secondArg = undefined;
+                signTrue = 1;                
+                secondArg = undefined;                                
             }
             else if ((signAct != "" && signActDiff == "") || (signTrue == 1 && signActDiff != "")) {
+                funRScreenSimple(scr, sign, signAct);                
+
                 firstArg = count(firstArg, scr, signAct);
                 getId("screen").innerHTML = firstArg;                
                 signAct = sign;
                 signTrue = 1;
-
                 signActDiff = "";
-                firstArgDiff = undefined;
+                firstArgDiff = undefined;                
             }
             else if (signActDiff != "") {
                 firstArgDiff = count(firstArgDiff, getId("screen").textContent, signActDiff);
@@ -545,14 +550,6 @@
             }
                         
             binOctHex(getId("screen").textContent);
-
-            if (sign == "*" || sign == "÷") {
-                var temp = "(" + getId("repeatScreen").textContent + ")" + sign;
-                getId("repeatScreen").innerHTML = temp;
-            }
-            else {
-                getId("repeatScreen").innerHTML += sign;
-            }
         }
 
         // These are arithmetic functions (region №3)
@@ -564,7 +561,7 @@
             binOctHex(result);
         }
 
-        // These are difficult arithmetic functions (region №3 x^y, mod, y√x, %)
+        // These are difficult arithmetic functions (region №3 x^y, mod, y√x)
         function arithmeticFuncDiff(sign) {                 
             if (signMark == "=") {
                 firstArg = undefined;
@@ -751,6 +748,64 @@
 
         //#endregion
         
+        //#region These functions add operations to the second screen.
+        
+        function funRScreenSimple(val, sign, signPrev) {
+            if ((sign == "*" || sign == "÷") && (signPrev == "+" || signPrev == "-")) {
+                var temp = "(" + getId("repeatScreen").textContent + val +")" +  sign;
+                getId("repeatScreen").innerHTML = temp;
+                signPrevScr = ")";
+            }
+            else {
+                getId("repeatScreen").innerHTML += val + sign;
+                signPrevScr = signPrev;
+            }
+        }
+
+        function funRScreen(symbol, change) {
+            console.log(signPrevScr);
+            if ((signPrevScr == "+" || signPrevScr == "-") && (change == "*" || change == "÷")) {
+                var temp = getId("repeatScreen").textContent;
+                temp = "(" + temp.slice(0, temp.length - 1) + ")" + change;
+                getId("repeatScreen").innerHTML = temp;
+                signPrevScr = ")";
+            }
+            else
+            if (signPrevScr == ")" && (symbol == "*" || symbol == "÷") && (change == "+" || change == "-")) {
+                var temp = getId("repeatScreen").textContent;
+                temp = temp.slice(1, temp.length - 2) + change;
+                getId("repeatScreen").innerHTML = temp;
+            }
+            else if ((symbol == "+" || symbol == "-") && (change == "*" || change == "÷") && signPrevScr == ")") {
+                var temp = getId("repeatScreen").textContent;
+                temp = "(" + temp.slice(0, temp.length - 1) + ")" + change;
+                getId("repeatScreen").innerHTML = temp;
+            }
+            else {
+                var temp = getId("repeatScreen").textContent;
+                temp = temp.slice(0, temp.length - 1) + change;
+                getId("repeatScreen").innerHTML = temp;
+            }
+        }
+
+        function funRScreenExt(symbol, x, res) {
+            if (x[x.length - 1] == ".") {
+                x = x.slice(0, x.length - 1);
+            }
+            if (repeatScreen == "") {
+                Id("screenRepeat").value += symbol + "(" + x + ")";
+                repeatScreen = symbol + "(" + x + ")";                               
+            }
+            else {
+                var screenR = getId("repeatScreen").value;
+                screenR = screenR.slice(0, screenR.length - repeatScreen.length);
+                getId("repeatScreen").value = screenR + symbol + "(" + repeatScreen + ")";
+                extended = symbol + "(" + repeatScreen + ")";
+            }
+        }        
+
+        //#endregion
+
         //#region These are auxiliary functions 
 
         // Extended mode
@@ -798,42 +853,7 @@
             getId("Bin").innerHTML = +(numDec).toString(2);
             getId("Oct").innerHTML = +(numDec).toString(8);
             getId("Hex").innerHTML = numDec.toString(16);
-        }
-
-        // This function adds all operations to the second screen.
-        function funRScreenExt(symbol, x, res) {
-            if (x[x.length - 1] == ".") {
-                x = x.slice(0, x.length - 1);
-            }
-            if (repeatScreen == "") {
-                Id("screenRepeat").value += symbol + "(" + x + ")";
-                repeatScreen = symbol + "(" + x + ")";                               
-            }
-            else {
-                var screenR = getId("repeatScreen").value;
-                screenR = screenR.slice(0, screenR.length - repeatScreen.length);
-                getId("repeatScreen").value = screenR + symbol + "(" + repeatScreen + ")";
-                extended = symbol + "(" + repeatScreen + ")";
-            }
-        }
-
-        function funRScreen(symbol, change) {
-            if ((symbol == "*" || symbol == "÷") && (change == "+" || change == "-")) {
-                var temp = getId("repeatScreen").textContent;
-                temp = temp.slice(1, temp.length - 2) + change;
-                getId("repeatScreen").innerHTML = temp;
-            }
-            else if ((symbol == "+" || symbol == "-") && (change == "*" || change == "÷")) {
-                var temp = getId("repeatScreen").textContent;
-                temp = "(" + temp.slice(0, temp.length - 1) + ")" + change;
-                getId("repeatScreen").innerHTML = temp;
-            }
-            else {
-                var temp = getId("repeatScreen").textContent;
-                temp = temp.slice(0, temp.length - 1) + change;
-                getId("repeatScreen").innerHTML = temp;
-            }
-        }
+        }       
  
         var getId = function (id) {
             return document.getElementById(id);
