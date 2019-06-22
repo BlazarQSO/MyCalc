@@ -572,7 +572,7 @@
 
             binOctHex(getId("screen").textContent);
         }
-
+        
         function count(x, y, sign) {
             switch (sign) {
                 case "+": {
@@ -734,12 +734,14 @@
 
         // Extended mode
         function extendedMode() {
-            var btn = getId("btn");
+            var btn = getId("btn");            
             if (btn.className == "extended") {
                 btn.className = "notExtended";
                 btn.style.width = "168px";
                 btn.innerHTML = "Extended";
                 
+                getId("moveDiv").style.width = "223px";
+
                 var mod = getId("mod");
                 mod.style.display = "none";
 
@@ -753,6 +755,8 @@
                 btn.style.width = "345px";
                 btn.innerHTML = "Simply";
                 
+                getId("moveDiv").style.width = "458px";
+
                 var mod = getId("mod");
                 mod.style.display = "block";
 
@@ -818,6 +822,45 @@
         // This is function for correcting existing problems with floating point.
         function cleanUp(number) {
             return parseFloat((parseFloat(number).toPrecision(12)));
+        }
+
+        //#endregion
+
+        //#region Move the Calculator
+
+        getId("moveCalc").onmousedown = function (e) {
+            var self = this;
+            getId("moveDiv").onmousedown = function (e) {
+                moveCalc(self, e);
+            }            
+        }
+
+        function moveCalc(elem, event) {
+            var startX = event.clientX;
+            var startY = event.clientY;
+
+            var elemX = elem.offsetLeft;
+            var elemY = elem.offsetTop;
+
+            var deltaX = startX - elemX;
+            var deltaY = startY - elemY;
+
+            document.addEventListener("mousemove", moveHandler, true);
+            document.addEventListener("mouseup", upHandler, true);
+
+            function moveHandler(e) {
+                if (!e) e = window.event;
+
+                elem.style.left = (e.clientX - deltaX) + "px";
+                elem.style.top = (e.clientY - deltaY) + "px";
+            }
+
+            function upHandler(e) {
+                if (!e) e = window.event;
+
+                document.removeEventListener("mouseup", upHandler, true);
+                document.removeEventListener("mousemove", moveHandler, true);
+            }
         }
 
         //#endregion

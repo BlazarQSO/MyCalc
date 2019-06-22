@@ -6,7 +6,7 @@
 /*------------------------HEADER-------------------------*/
 
 .header {        
-    height: 125px;
+    height: 125px;    
     background-color: darkslateblue;
     border: 1px solid black;
     border-radius: 15px;
@@ -24,7 +24,7 @@
     margin-top: 1.5%;    
     margin-bottom: 1.5%;    
     width: 19%;
-    height: 480px;
+    height: 510px;
     border-radius: 15px;
     box-shadow: purple 2px 2px 5px, purple -2px 2px 5px, purple 2px -2px 5px, purple -2px -2px 5px,
                 purple 4px 4px 20px, purple -4px 4px 20px, purple 4px -4px 20px, purple -4px -4px 20px, 
@@ -44,7 +44,7 @@
     margin-top: 1.5%;
     margin-left: 1.5%;
     width: 79.5%;
-    height: 480px;      
+    height: 510px;      
     border-radius: 15px;
     box-shadow: purple 2px 2px 5px, purple -2px 2px 5px, purple 2px -2px 5px, purple -2px -2px 5px,
                 purple 4px 4px 20px, purple -4px 4px 20px, purple 4px -4px 20px, purple -4px -4px 20px, 
@@ -59,7 +59,8 @@
 .footer {
     background-color: darkslateblue;        
     height: 150px;
-    border: 1px solid black;        
+    border: 1px solid black;       
+    padding-top: 0px; 
     border-radius: 15px;
     box-shadow: purple 2px 2px 5px, purple -2px 2px 5px, purple 2px -2px 5px, purple -2px -2px 5px,
                 purple 4px 4px 20px, purple -4px 4px 20px, purple 4px -4px 20px, purple -4px -4px 20px, 
@@ -76,6 +77,10 @@
     font-weight: bold;
     font-family: 'Times New Roman', Times, serif;
     text-shadow: 2px 2px 3px black, -2px 2px 3px black, 2px -2px 3px black;
+
+    -moz-user-select: none;
+    -khtml-user-select: none;
+    user-select: none;
 }
 
 .title-aside {
@@ -83,6 +88,10 @@
     font-size: 30px;
     color: darkblue;
     text-shadow: 1px 1px 3px #9d0707, -1px 1px 3px #9d0707, 1px -1px 3px #9d0707;
+
+    -moz-user-select: none;
+    -khtml-user-select: none;
+    user-select: none;
 }
 
 .text-p {
@@ -104,10 +113,11 @@
 
 .calc {
     margin: 5px 0 0 15%;
+    margin: 0px;
 }
 
             /*-----------BUTTONS-------------*/
-button {
+button, #moveDiv {
     background-color: gold;
     color: forestgreen;
     width: 50px;
@@ -122,6 +132,10 @@ button {
     text-decoration: none;        
     padding: 0px;
     transition: all ease 0.3s;
+
+    -moz-user-select: none;
+    -khtml-user-select: none;
+    user-select: none;      
 }
 
     button:hover {
@@ -172,7 +186,11 @@ button {
     text-align: right;
     white-space: nowrap;
     overflow-y: hidden;
-    overflow-x: scroll, no-display;
+    overflow-x: scroll, no-display;        
+    
+    -moz-user-select: none;
+    -khtml-user-select: none;
+    user-select: none; 
 }
 
             /*-----------INFO SCREEN-----------*/
@@ -190,6 +208,10 @@ button {
     white-space: nowrap;
     overflow-y: hidden;
     overflow-x: scroll, no-display;
+    
+    -moz-user-select: none;
+    -khtml-user-select: none;
+    user-select: none; 
 }
 
     .info-screen div {
@@ -248,4 +270,14 @@ button {
     margin-left: 9px;
 }
 
+#moveCalc {
+    position: absolute;
+}
+
+#moveDiv {
+    text-align: center;
+    height: 25px;
+    width: 458px;
+    font-size: 22px;
+}
 /*-----------------END Calculator------------------*/
