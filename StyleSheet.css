@@ -118,27 +118,42 @@
 }
 
             /*-----------BUTTONS-------------*/
+
 button, #moveDiv {
     background-color: gold;
-    color: forestgreen;
+    color: darkgreen;
     width: 50px;
-    height: 50px;    
-    font-size: 28px;
+    height: 50px;
+    font-size: 32px;
     font-family: 'Times New Roman', Times, serif;
     border: 2px solid #927e14;
-    box-shadow: black 5px 6px 2px;    
+    box-shadow: black 5px 6px 2px;
     outline: none;
     text-decoration-line: none;
-    text-decoration: none;        
-    padding: 0px;    
+    text-decoration: none;
+    padding: 0px;
     transition: color 0.3s, background-color 0.3s, box-shadow 0.3s;
     -moz-user-select: none;
     -khtml-user-select: none;
-    user-select: none;      
+    user-select: none;
     margin-left: 5px;
     margin-bottom: 5px;
+    /* IE10+ */
+    background-image: -ms-linear-gradient(top, #FFD700 0%, #D9CF73 50%, #8F7800 100%);
+    /* Mozilla Firefox */
+    background-image: -moz-linear-gradient(top, #FFD700 0%, #D9CF73 50%, #8F7800 100%);
+    /* Opera */
+    background-image: -o-linear-gradient(top, #FFD700 0%, #D9CF73 50%, #8F7800 100%);
+    /* Webkit (Safari/Chrome 10) */
+    background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0, #FFD700), color-stop(50, #D9CF73), color-stop(100, #8F7800));
+    /* Webkit (Chrome 11+) */
+    background-image: -webkit-linear-gradient(top, #FFD700 0%, #D9CF73 50%, #8F7800 100%);
+    /* W3C Markup */
+    background-image: linear-gradient(to bottom, #FFD700 0%, #D9CF73 50%, #8F7800 100%);
 }
+
     button:hover {
+        background-image:none;
         background-color: burlywood;
         color: blue;
         box-shadow: black 3px 4px 2px;
@@ -166,31 +181,43 @@ button, #moveDiv {
     float: left;
 }
 
-.screen textarea{
+.screen textarea {
     background-color: azure;
     color: blue;
-    width: 223px;    
-    height: 55px;    
+    width: 223px;
+    height: 55px;
     max-width: 458px;
     min-width: 223px;
     min-height: 55px;
     max-height: 55px;
     font-size: 30px;
-    font-family: 'Times New Roman', Times, serif;        
+    font-family: 'Times New Roman', Times, serif;
     border: 2px solid #927e14;
-    box-shadow: 5px 8px 2px black;    
+    box-shadow: 5px 8px 2px black;
     text-align: right;
     white-space: nowrap;
     overflow-y: hidden;
-    overflow-x: scroll, no-display;   
+    overflow-x: scroll, no-display;
     -moz-user-select: none;
     -khtml-user-select: none;
-    user-select: none; 
+    user-select: none;
     margin: 0;
     padding: 0;
-    margin-left: 5px;  
-    margin-right: -6px;  
-    margin-bottom: 4px;
+    margin-left: 5px;
+    margin-right: -6px;
+    margin-bottom: 4px;        
+    /* IE10+ */
+    background-image: -ms-linear-gradient(top, #F0FFFF 0%, #E9F7F7 50%, #BDE9F0 100%);
+    /* Mozilla Firefox */
+    background-image: -moz-linear-gradient(top, #F0FFFF 0%, #E9F7F7 50%, #BDE9F0 100%);
+    /* Opera */
+    background-image: -o-linear-gradient(top, #F0FFFF 0%, #E9F7F7 50%, #BDE9F0 100%);
+    /* Webkit (Safari/Chrome 10) */
+    background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0, #F0FFFF), color-stop(50, #E9F7F7), color-stop(100, #BDE9F0));
+    /* Webkit (Chrome 11+) */
+    background-image: -webkit-linear-gradient(top, #F0FFFF 0%, #E9F7F7 50%, #BDE9F0 100%);
+    /* W3C Markup */
+    background-image: linear-gradient(to bottom, #F0FFFF 0%, #E9F7F7 50%, #BDE9F0 100%);
 }
 
             /*-----------INFO SCREEN-----------*/
@@ -212,6 +239,18 @@ button, #moveDiv {
     padding: 0;
     margin-left: 15px;
     margin-bottom: 5px;
+    /* IE10+ */
+    background-image: -ms-linear-gradient(top, #FFD700 0%, #DBB912 50%, #E3C532 100%);
+    /* Mozilla Firefox */
+    background-image: -moz-linear-gradient(top, #FFD700 0%, #DBB912 50%, #E3C532 100%);
+    /* Opera */
+    background-image: -o-linear-gradient(top, #FFD700 0%, #DBB912 50%, #E3C532 100%);
+    /* Webkit (Safari/Chrome 10) */
+    background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0, #FFD700), color-stop(50, #DBB912), color-stop(100, #E3C532));
+    /* Webkit (Chrome 11+) */
+    background-image: -webkit-linear-gradient(top, #FFD700 0%, #DBB912 50%, #E3C532 100%);
+    /* W3C Markup */
+    background-image: linear-gradient(to bottom, #FFD700 0%, #DBB912 50%, #E3C532 100%);
 }
 
     .info-screen div {
@@ -226,7 +265,7 @@ button, #moveDiv {
         margin-left: 5px;
     }
     .info-screen span#M {
-        font-size: 16px;
+        font-size: 22px;
         color: blue;
     }
 
@@ -257,6 +296,7 @@ button, #moveDiv {
     width: 345px;    
     float: left;
     transition: width 0.4s;
+    text-shadow: 1px 1px 1px black;
 }
 
 #mod {
@@ -278,8 +318,9 @@ button, #moveDiv {
     text-align: center;
     height: 25px;
     width: 458px;
-    font-size: 22px;
+    font-size: 25px;
     margin-top: 7px;
+    text-shadow: 1px 1px 1px black;
 }
 
 .inblock {

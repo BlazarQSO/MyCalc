@@ -440,7 +440,7 @@
                 onClickHandler: function (e) {                    
                     return function () {
                         if (memory != undefined) {
-                            getId("screen").innerHTML = memory;
+                            getId("screen").innerHTML = triad(memory);
                             binOctHex(memory);
                             signTrue = 0;
                             secondArg = undefined;                            
@@ -453,11 +453,11 @@
                 onClickHandler: function (e) {                    
                     return function () {
                         if (memory == undefined) {
-                            memory = Number(getId("screen").textContent);
-                            getId("M").innerHTML = memory;
+                            memory = Number(getId("screen").textContent.replace(/\s/g, ""));
+                            getId("M").innerHTML = triad(memory);
                         } else {
-                            memory = Number(memory) + Number(getId("screen").textContent);
-                            getId("M").innerHTML = memory;
+                            memory = Number(memory) + Number(getId("screen").textContent.replace(/\s/g, ""));
+                            getId("M").innerHTML = triad(memory);
                         }
                     };
                 }
@@ -467,11 +467,11 @@
                 onClickHandler: function (e) {                    
                     return function () {
                         if (memory == undefined) {
-                            memory = Number(0) - Number(getId("screen").textContent);
-                            getId("M").innerHTML = memory;
+                            memory = Number(0) - Number(getId("screen").textContent.replace(/\s/g, ""));
+                            getId("M").innerHTML = triad(memory);
                         } else {
-                            memory = Number(memory) - Number(getId("screen").textContent);
-                            getId("M").innerHTML = memory;
+                            memory = Number(memory) - Number(getId("screen").textContent.replace(/\s/g, ""));
+                            getId("M").innerHTML = triad(memory);
                         }
                     };
                 }
@@ -480,8 +480,8 @@
                 title: "MS",
                 onClickHandler: function (e) {                    
                     return function () {
-                        memory = Number(getId("screen").textContent);
-                        getId("M").innerHTML = memory;
+                        memory = Number(getId("screen").textContent.replace(/\s/g, ""));
+                        getId("M").innerHTML = triad(memory);
                     };
                 }
             },
@@ -586,7 +586,7 @@
         // These are arithmetic functions (region №3)
         function arithmeticFunc(func, signScr) {
             var src = getId("screen").textContent.replace(/\s/g, "");
-            var result = count(src, firstArg, func);
+            var result = count(src, firstArg, func);                   
             getId("screen").innerHTML = triad(result);
             signTrue = 0;
 
@@ -594,7 +594,7 @@
             binOctHex(result);
         }
 
-        // These are difficult arithmetic functions (region №3 x^y, mod, y√x)
+        // These are difficult arithmetic functions (region №4 x^y, mod, y√x)
         function arithmeticFuncDiff(sign) {                 
             if (signMark == "=") {
                 firstArg = undefined;
@@ -637,8 +637,8 @@
                         return undefined;
                     }
                 }
-                case "x^2": {
-                    return cleanUp(Number(x) * Number(x));
+                case "x^2": {                    
+                    return Number(myCleanUp(Number(x) * Number(x)));
                 }
                 case "x^3": {
                     return cleanUp(Number(x) * Number(x) * Number(x));
@@ -862,12 +862,12 @@
         //#endregion
 
         //#region These are auxiliary functions 
-
+        
         // This function divides number to triad 
         function triad(val) {            
             var part = "";
-            var k = 3;
-            val = val.toString();
+            var k = 3;            
+            val = val.toString();            
             if (val.indexOf(".") > 0) {
                 part = val.slice(val.indexOf("."), val.length);
                 val = val.slice(0, val.indexOf("."));
@@ -979,8 +979,25 @@
         }
         
         // This is function for correcting existing problems with floating point.
-        function cleanUp(number) {
-            return parseFloat((parseFloat(number).toPrecision(12)));
+        function cleanUp(number) {            
+            return parseFloat((parseFloat(number).toPrecision(16)));
+        }
+        
+        function myCleanUp(number) {
+            var temp = number.toString();
+            if (temp.indexOf(".") > 0) {
+                var num = temp.slice(0, temp.indexOf("."));
+                temp = temp.slice(temp.indexOf("."), temp.length);
+                var index = temp.search(/0{8,}/);
+                if (index != -1) {
+                    return num;
+                }
+                index = temp.search(/9{8,}/);
+                if (index != -1) {                    
+                    return Number(num) + Number(1);
+                }
+            }
+            return number;
         }
 
         //#endregion
