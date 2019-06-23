@@ -490,7 +490,15 @@
                         extendedMode();
                     }
                 }
-            }
+            },
+            "hide": {
+                title: "hide",
+                onClickHandler: function (e) {
+                    return function () {
+                        hideInfScr();
+                    }
+                }
+            },
             //#endregion
             
         }
@@ -863,12 +871,18 @@
                 btn.style.width = "168px";
                 btn.innerHTML = "Extended";
                 
+                getId("screen").style.width = "223px";
+                getId("repeatScreen").style.width = "223px";
                 getId("moveDiv").style.width = "223px";
                 getId("mod").style.display = "none";
                 var info = getId("info");
                 info.style.height = "0";
                 info.style.width = "0";
-                info.style.border = "none";                
+                info.style.border = "none";
+                var hide = getId("hide");
+                hide.style.height = "0";
+                hide.style.widows = "0";
+                hide.style.border = "none";
 
                 var list = document.getElementsByClassName("extended-mode");
                 for (var i = 0; i < list.length; i++) {
@@ -884,14 +898,41 @@
                 getId("mod").style.display = "block";
                 var info = getId("info");
                 info.style.height = "122px";
-                info.style.width = "223px";
+                info.style.width = "222px";
                 info.style.border = "2px solid #927e14";
+                var hide = getId("hide");
+                hide.style.height = "25px";
+                hide.style.width = "25px";
+                hide.style.border = "2px solid #927e14";
+                hide.innerHTML = ">>";
+                if (hide.className[hide.className.length - 1] == "|") {
+                    hide.className = hide.className.slice(0, hide.className.length - 2);
+                }
 
                 var list = document.getElementsByClassName("extended-mode");
                 for (var i = 0; i < list.length; i++) {
                     list[i].style.display = "block";
                 }
             }
+        }
+
+        // This function hides the info screen.
+        function hideInfScr() {            
+            var hide = getId("hide");
+            if (hide.className[hide.className.length - 1] != "|") {                
+                getId("info").style.width = "103px";
+                getId("screen").style.width = "342px";
+                getId("repeatScreen").style.width = "342px";
+                hide.innerHTML = "<<";
+                hide.className = hide.className + " |";
+            }
+            else {
+                getId("info").style.width = "222px";
+                getId("screen").style.width = "223px";
+                getId("repeatScreen").style.width = "223px";
+                hide.innerHTML = ">>";
+                hide.className = hide.className.slice(0, hide.className.length - 2);
+            }            
         }
 
         // Add a data to fields Bin Oct Hex.
