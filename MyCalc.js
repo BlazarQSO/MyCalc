@@ -25,21 +25,21 @@
                     return function () {
                         if ((firstArg != undefined && signAct != "") || firstArgDiff != undefined) {
                             if (secondArg == undefined) {
-                                secondArg = getId("screen").textContent;
+                                secondArg = getId("screen").textContent.replace(/\s/g, "");;
                             } 
                             
                             if (signActDiff == "") {
                                 firstArg = count(firstArg, secondArg, signAct)
-                                getId("screen").innerHTML = firstArg;
+                                getId("screen").innerHTML = triad(firstArg);
                                 binOctHex(firstArg);
                                 signTrue = 1;
                                 signMark = "=";
                             }
                             else {
                                 if (firstArg != undefined && signAct != "") {
-                                    secondArg = count(firstArgDiff, getId("screen").textContent, signActDiff);
+                                    secondArg = count(firstArgDiff, getId("screen").textContent.replace(/\s/g, ""), signActDiff);
                                     firstArg = count(firstArg, secondArg, signAct);
-                                    getId("screen").innerHTML = firstArg;
+                                    getId("screen").innerHTML = triad(firstArg);
                                     binOctHex(firstArg);
                                     firstArgDiff = undefined;
                                     signActDiff = "";                                    
@@ -48,7 +48,7 @@
                                 }
                                 else {
                                     firstArgDiff = count(firstArgDiff, secondArg, signActDiff)
-                                    getId("screen").innerHTML = firstArgDiff;
+                                    getId("screen").innerHTML = triad(firstArgDiff);
                                     binOctHex(firstArgDiff);
                                     signTrue = 1;
                                     signMark = "=";
@@ -57,7 +57,7 @@
                         }
                         getId("repeatScreen").innerHTML = "";
                         signPrevScr = "";
-                        rScrOperation = "";
+                        rScrOperation = "";                        
                     };
                 }
             },
@@ -178,16 +178,19 @@
             "DEL": {
                 title: "DEL",                
                 onClickHandler: function (e) {                    
-                    return function () {
+                    return function () {                        
                         if (signTrue == 0 && rScrOperation == "") {
+
                             var val = getId("screen").textContent;
+                            val = val.replace(/\s/g, "");
                             val = val.slice(0, val.length - 1);
                             if (val != "") {
-                                getId("screen").innerHTML = val;
+                                getId("screen").innerHTML = triad(val);
                             } else {
                                 getId("screen").innerHTML = "0";
                             }
-                            binOctHex(getId("screen").textContent);
+                            
+                            binOctHex(val);
                         }
                     };
                 }
@@ -509,15 +512,17 @@
                 && signTrue == 0 && arguments[1] != "π")
             {
                 if (rScrOperation != "") {
-                    getId("screen").innerHTML = val;
+                    getId("screen").innerHTML = triad(val);
                     var temp = getId("repeatScreen").textContent;
                     temp = temp.slice(0, temp.length - rScrOperation.length);
                     getId("repeatScreen").innerHTML = temp;
                     rScrOperation = "";
                 }
                 else {
-                    getId("screen").innerHTML += val;
-                    binOctHex(getId("screen").textContent);
+                    var temp = getId("screen").textContent + val;                    
+                    temp = temp.replace(/\s/g, "");                    
+                    getId("screen").innerHTML = triad(temp);
+                    binOctHex(temp);
                 }
             }
             else {
@@ -545,7 +550,7 @@
                 return;
             }
 
-            var scr = getId("screen").textContent;
+            var scr = getId("screen").textContent.replace(/\s/g, "");;
 
             if (firstArg == undefined || secondArg != undefined) {
                 funRScreenSimple(scr, sign, signAct);                
@@ -559,30 +564,30 @@
                 funRScreenSimple(scr, sign, signAct);                
 
                 firstArg = count(firstArg, scr, signAct);
-                getId("screen").innerHTML = firstArg;                
+                getId("screen").innerHTML = triad(firstArg);
                 signAct = sign;
                 signTrue = 1;
                 signActDiff = "";
                 firstArgDiff = undefined;                
             }
             else if (signActDiff != "") {
-                firstArgDiff = count(firstArgDiff, getId("screen").textContent, signActDiff);
+                firstArgDiff = count(firstArgDiff, getId("screen").textContent.replace(/\s/g, ""), signActDiff);
                 firstArg = count(firstArg, firstArgDiff, signAct);
-                getId("screen").innerHTML = firstArg;                
+                getId("screen").innerHTML = triad(firstArg);
                 firstArgDiff = undefined;
                 signActDiff = "";
                 signAct = sign;
                 signTrue = 1;
             }
                         
-            binOctHex(getId("screen").textContent);
+            binOctHex(getId("screen").textContent.replace(/\s/g, ""));
         }
 
         // These are arithmetic functions (region №3)
         function arithmeticFunc(func, signScr) {
-            var src = getId("screen").textContent;
+            var src = getId("screen").textContent.replace(/\s/g, "");
             var result = count(src, firstArg, func);
-            getId("screen").innerHTML = result;
+            getId("screen").innerHTML = triad(result);
             signTrue = 0;
 
             funRScreenArith(signScr, src);
@@ -599,24 +604,19 @@
                 signMark = "";
             }
 
-            //if (signTrue == 1 && secondArg == undefined) {
-            //    signActDiff = sign;
-            //    return;
-            //}
-
             if (signActDiff == "" || (signTrue == 1 && secondArg == undefined)) {
-                firstArgDiff = getId("screen").textContent;
+                firstArgDiff = getId("screen").textContent.replace(/\s/g, "");
                 signActDiff = sign;
                 signTrue = 1;
             }
             else if (signActDiff != "") {                
-                firstArgDiff = count(firstArgDiff, getId("screen").textContent, signActDiff);                
-                getId("screen").innerHTML = firstArgDiff;
+                firstArgDiff = count(firstArgDiff, getId("screen").textContent.replace(/\s/g, ""), signActDiff);
+                getId("screen").innerHTML = triad(firstArgDiff);
                 signActDiff = sign;
                 signTrue = 1;
             }
 
-            binOctHex(getId("screen").textContent);
+            binOctHex(getId("screen").textContent.replace(/\s/g, ""));
         }
         
         function count(x, y, sign) {
@@ -863,8 +863,34 @@
 
         //#region These are auxiliary functions 
 
+        // This function divides number to triad 
+        function triad(val) {            
+            var part = "";
+            var k = 3;
+            val = val.toString();
+            if (val.indexOf(".") > 0) {
+                part = val.slice(val.indexOf("."), val.length);
+                val = val.slice(0, val.indexOf("."));
+            }
+            
+            if (arguments[1] == "4") {
+                k = 4;
+            }
+            
+            var count = val.length;
+            var index = 0;
+            for (var i = count - 1; i > 0; i--) {
+                index++;
+                if (index % k == 0) {
+                    var temp = val.slice(0, i) + " " + val.slice(i, val.length);
+                    val = temp;
+                }                
+            }            
+            return val + part;
+        }
+
         // Extended mode
-        function extendedMode() {
+        function extendedMode() {            
             var btn = getId("btn");            
             if (btn.className == "extended") {
                 btn.className = "notExtended";
@@ -938,9 +964,9 @@
         // Add a data to fields Bin Oct Hex.
         function binOctHex(val) {
             let numDec = Number(val);
-            getId("Bin").innerHTML = +(numDec).toString(2);
-            getId("Oct").innerHTML = +(numDec).toString(8);
-            getId("Hex").innerHTML = numDec.toString(16);
+            getId("Bin").innerHTML = triad(+(numDec).toString(2), "4");
+            getId("Oct").innerHTML = triad(+(numDec).toString(8));
+            getId("Hex").innerHTML = triad(numDec.toString(16));
         }       
  
         var getId = function (id) {
