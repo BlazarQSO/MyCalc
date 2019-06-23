@@ -14,6 +14,7 @@
         var memory = undefined;         
             
         var signPrevScr = "";           // This argument is a previous sign for correct data input.
+        var rScrOperation = "";         // This argument is a writing of arithmetic operation. 
 
         // This is Array of objects buttons
         var buttons = {
@@ -56,6 +57,7 @@
                         }
                         getId("repeatScreen").innerHTML = "";
                         signPrevScr = "";
+                        rScrOperation = "";
                     };
                 }
             },
@@ -177,7 +179,7 @@
                 title: "DEL",                
                 onClickHandler: function (e) {                    
                     return function () {
-                        if (signTrue == 0) {
+                        if (signTrue == 0 && rScrOperation == "") {
                             var val = getId("screen").textContent;
                             val = val.slice(0, val.length - 1);
                             if (val != "") {
@@ -185,6 +187,7 @@
                             } else {
                                 getId("screen").innerHTML = "0";
                             }
+                            binOctHex(getId("screen").textContent);
                         }
                     };
                 }
@@ -193,7 +196,7 @@
                 title: "C",                
                 onClickHandler: function (e) {                    
                     return function () {
-                        getId("screen").innerHTML = "0";
+                        getId("screen").innerHTML = "0";                        
                         getId("repeatScreen").innerHTML = "";
                         firstArg = undefined;
                         secondArg = undefined;
@@ -202,9 +205,10 @@
                         signAct = "";
                         signActDiff = "";
                         signMark = "";
-                        signTrue = 0;
-                        getId("repeatScreen").innerHTML = "";
+                        signTrue = 0;                        
                         signPrevScr = "";
+                        rScrOperation = "";
+                        binOctHex(0);
                     };
                 }
             },
@@ -270,16 +274,16 @@
                 onClickHandler: function (e) {
                     var self = this.title;
                     return function () {
-                        arithmeticFunc(self);
+                        arithmeticFunc(self, "sqr");
                     };
                 }
             },
             "Xdeg3": {
                 title: "x^3",
                 onClickHandler: function (e) {                    
-                    var self = this.title;
+                    var self = this.title;                    
                     return function () {
-                        arithmeticFunc(self);
+                        arithmeticFunc(self, "cube");
                     };
                 }
             },
@@ -288,7 +292,7 @@
                 onClickHandler: function (e) {                    
                     var self = this.title;
                     return function () {
-                        arithmeticFunc(self);
+                        arithmeticFunc(self, "√");
                     };
                 }
             },
@@ -297,7 +301,7 @@
                 onClickHandler: function (e) {                    
                     var self = this.title;
                     return function () {
-                        arithmeticFunc(self);
+                        arithmeticFunc(self, "10^");
                     };
                 }
             },
@@ -306,7 +310,7 @@
                 onClickHandler: function (e) {                    
                     var self = this.title;
                     return function () {
-                        arithmeticFunc(self);
+                        arithmeticFunc(self, "1/");
                     };
                 }
             },            
@@ -315,7 +319,7 @@
                 onClickHandler: function (e) {                    
                     var self = this.title;
                     return function () {
-                        arithmeticFunc(self);
+                        arithmeticFunc(self, "fact");
                     };
                 }
             },
@@ -324,7 +328,7 @@
                 onClickHandler: function (e) {                    
                     var self = this.title;
                     return function () {
-                        arithmeticFunc(self);
+                        arithmeticFunc(self, "log");
                     };
                 }
             },
@@ -333,7 +337,7 @@
                 onClickHandler: function (e) {                    
                     var self = this.title;
                     return function () {
-                        arithmeticFunc(self);
+                        arithmeticFunc(self, "ln");
                     };
                 }
             },
@@ -342,7 +346,7 @@
                 onClickHandler: function (e) {                    
                     var self = this.title;
                     return function () {
-                        arithmeticFunc(self);
+                        arithmeticFunc(self, "e^");
                     };
                 }
             },         
@@ -351,7 +355,7 @@
                 onClickHandler: function (e) {                    
                     var self = this.title;
                     return function () {
-                        arithmeticFunc(self);
+                        arithmeticFunc(self, "sin");
                     };
                 }
             },
@@ -360,7 +364,7 @@
                 onClickHandler: function (e) {                    
                     var self = this.title;
                     return function () {
-                        arithmeticFunc(self);
+                        arithmeticFunc(self, "cos");
                     };
                 }
             },
@@ -369,10 +373,23 @@
                 onClickHandler: function (e) {                    
                     var self = this.title;
                     return function () {
-                        arithmeticFunc(self);
+                        arithmeticFunc(self, "tan");
                     };
                 }
             },
+            "perc": {
+                title: "%",
+                onClickHandler: function (e) {
+                    var self = this.title;
+                    return function () {
+                        arithmeticFunc(self, "%");
+                    }
+                }
+            },
+
+            //#endregion
+
+            //#region region №4 These are buttons of difficult functions
 
             "XdegY": {
                 title: "x^y",
@@ -401,18 +418,10 @@
                     };
                 }
             },
-            "perc": {
-                title: "%",
-                onClickHandler: function (e) {
-                    var self = this.title;
-                    return function () {
-                        arithmeticFunc(self);
-                    }
-                }
-            },
+
             //#endregion
             
-            //#region region №4 These are service functions.
+            //#region region №5 These are service functions.
 
             "MC": {
                 title: "MC",
@@ -491,11 +500,20 @@
             if ((getId("screen").textContent != "0" || val == ".")
                 && signTrue == 0 && arguments[1] != "π")
             {
-                getId("screen").innerHTML += val;
-                binOctHex(getId("screen").textContent);
+                if (rScrOperation != "") {
+                    getId("screen").innerHTML = val;
+                    var temp = getId("repeatScreen").textContent;
+                    temp = temp.slice(0, temp.length - rScrOperation.length);
+                    getId("repeatScreen").innerHTML = temp;
+                    rScrOperation = "";
+                }
+                else {
+                    getId("screen").innerHTML += val;
+                    binOctHex(getId("screen").textContent);
+                }
             }
             else {
-                document.getElementById("screen").innerHTML = val;
+                getId("screen").innerHTML = val;
                 binOctHex(val);
                 signTrue = 0;
             }
@@ -553,11 +571,13 @@
         }
 
         // These are arithmetic functions (region №3)
-        function arithmeticFunc(func) {
+        function arithmeticFunc(func, signScr) {
             var src = getId("screen").textContent;
             var result = count(src, firstArg, func);
             getId("screen").innerHTML = result;
+            signTrue = 0;
 
+            funRScreenArith(signScr, src);
             binOctHex(result);
         }
 
@@ -664,6 +684,10 @@
                     return x % y;
                 }
                 case "%": {
+                    if (y == undefined) {
+                        y = x;
+                        firstArg = x;
+                    }
                     return y * x / 100;
                 }
             }
@@ -751,6 +775,15 @@
         //#region These functions add operations to the second screen.
         
         function funRScreenSimple(val, sign, signPrev) {
+            if (val[val.length - 1] == ".") {
+                val = val.slice(0, val.length - 1);
+            }            
+            
+            if (rScrOperation != "") {
+                val = "";
+                rScrOperation = "";
+            }
+
             if ((sign == "*" || sign == "÷") && (signPrev == "+" || signPrev == "-")) {
                 var temp = "(" + getId("repeatScreen").textContent + val +")" +  sign;
                 getId("repeatScreen").innerHTML = temp;
@@ -762,8 +795,7 @@
             }
         }
 
-        function funRScreen(symbol, change) {
-            console.log(signPrevScr);
+        function funRScreen(symbol, change) {            
             if ((signPrevScr == "+" || signPrevScr == "-") && (change == "*" || change == "÷")) {
                 var temp = getId("repeatScreen").textContent;
                 temp = "(" + temp.slice(0, temp.length - 1) + ")" + change;
@@ -788,19 +820,34 @@
             }
         }
 
-        function funRScreenExt(symbol, x, res) {
+        function funRScreenArith(symbol, x) {
             if (x[x.length - 1] == ".") {
                 x = x.slice(0, x.length - 1);
             }
-            if (repeatScreen == "") {
-                Id("screenRepeat").value += symbol + "(" + x + ")";
-                repeatScreen = symbol + "(" + x + ")";                               
+            
+            if (symbol == "%") {
+                if (rScrOperation == "") {
+                    getId("repeatScreen").innerHTML += x + symbol + "(" + firstArg + ")";
+                    rScrOperation = x + symbol + "(" + firstArg + ")";
+                }
+                else {
+                    var temp = getId("repeatScreen").textContent;
+                    temp = temp.slice(0, temp.length - rScrOperation.length);
+                    getId("repeatScreen").innerHTML = temp + x + symbol + "(" + firstArg + ")";
+                    rScrOperation = x + symbol + "(" + firstArg + ")";
+                }
+                return;
+            }            
+
+            if (rScrOperation == "") {
+                getId("repeatScreen").innerHTML += symbol + "(" + x + ")";
+                rScrOperation = symbol + "(" + x + ")";
             }
             else {
-                var screenR = getId("repeatScreen").value;
-                screenR = screenR.slice(0, screenR.length - repeatScreen.length);
-                getId("repeatScreen").value = screenR + symbol + "(" + repeatScreen + ")";
-                extended = symbol + "(" + repeatScreen + ")";
+                var temp = getId("repeatScreen").textContent;
+                temp = temp.slice(0, temp.length - rScrOperation.length);
+                getId("repeatScreen").innerHTML = temp + symbol + "(" + rScrOperation + ")";
+                rScrOperation = symbol + "(" + rScrOperation + ")";
             }
         }        
 
