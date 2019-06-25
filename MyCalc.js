@@ -399,7 +399,7 @@
                 onClickHandler: function (e) {
                     var self = this.title;
                     return function () {
-                        arithmeticFuncDiff(self);
+                        arithmeticFuncDiff(self, "^");
                     };
                 }
             },
@@ -408,7 +408,7 @@
                 onClickHandler: function (e) {
                     var self = this.title;
                     return function() {
-                        arithmeticFuncDiff(self);
+                        arithmeticFuncDiff(self, "y√x");
                     }
                 }
             },
@@ -417,7 +417,7 @@
                 onClickHandler: function (e) {
                     var self = this.title;
                     return function () {
-                        arithmeticFuncDiff(self);
+                        arithmeticFuncDiff(self, "mod");
                     };
                 }
             },
@@ -548,20 +548,44 @@
                 funRScreen(signAct, sign);
                 signAct = sign;
                 return;
-            }
-
-            var scr = getId("screen").textContent.replace(/\s/g, "");;
+            }            
+            
+            var scr = getId("screen").textContent.replace(/\s/g, "");
 
             if (firstArg == undefined || secondArg != undefined) {
-                funRScreenSimple(scr, sign, signAct);                
+                if (signActDiff == "") {
+                    funRScreenSimple(scr, sign, signAct);
+                    
+                    firstArg = scr;
+                    signAct = sign;
+                    signTrue = 1;
+                    secondArg = undefined;
+                }
+                else {
+                    if (signTrue != 1) {
+                        firstArg = count(firstArgDiff, scr, signActDiff);
+                        getId("screen").innerHTML = triad(firstArg);
+                        funRScreenSimple(scr, sign, signAct);
 
-                firstArg = scr;                
-                signAct = sign;
-                signTrue = 1;                
-                secondArg = undefined;                                
+                        signAct = sign;
+                        signTrue = 1;
+                        signActDiff = "";
+                        firstArgDiff = undefined;
+                    } else {
+                        funRScreen(signAct, sign, signActDiff);
+                        firstArg = scr;
+                        signActDiff = "";
+                        firstArgDiff = undefined;
+                        signAct = sign;
+                    }
+                }
             }
             else if ((signAct != "" && signActDiff == "") || (signTrue == 1 && signActDiff != "")) {
-                funRScreenSimple(scr, sign, signAct);                
+                if (signTrue == 1 && signActDiff != "") {
+                    funRScreen(signAct, sign, signActDiff);
+                } else {
+                    funRScreenSimple(scr, sign, signAct);
+                }                
 
                 firstArg = count(firstArg, scr, signAct);
                 getId("screen").innerHTML = triad(firstArg);
@@ -571,12 +595,14 @@
                 firstArgDiff = undefined;                
             }
             else if (signActDiff != "") {
-                firstArgDiff = count(firstArgDiff, getId("screen").textContent.replace(/\s/g, ""), signActDiff);
+                firstArgDiff = count(firstArgDiff, scr, signActDiff);
+                funRScreenSimple(scr, sign, signAct);
+
                 firstArg = count(firstArg, firstArgDiff, signAct);
                 getId("screen").innerHTML = triad(firstArg);
                 firstArgDiff = undefined;
                 signActDiff = "";
-                signAct = sign;
+                signAct = sign;                
                 signTrue = 1;
             }
                         
@@ -595,7 +621,7 @@
         }
 
         // These are difficult arithmetic functions (region №4 x^y, mod, y√x)
-        function arithmeticFuncDiff(sign) {                 
+        function arithmeticFuncDiff(sign, signScr) {
             if (signMark == "=") {
                 firstArg = undefined;
                 firstArgDiff = undefined;
@@ -604,13 +630,23 @@
                 signMark = "";
             }
 
+            var scr = getId("screen").textContent.replace(/\s/g, "");
             if (signActDiff == "" || (signTrue == 1 && secondArg == undefined)) {
-                firstArgDiff = getId("screen").textContent.replace(/\s/g, "");
-                signActDiff = sign;
+                firstArgDiff = scr                
+                if (signActDiff == "" && signTrue != 1) {
+                    funRScreenSimple(firstArgDiff, signScr, signAct);
+                }
+                else if (signActDiff == "" && signTrue == 1) {
+                    funRScreenDiff(firstArgDiff, signScr, signAct);
+                    firstArg = 0;
+                }                
+                signActDiff = sign;                
                 signTrue = 1;
             }
-            else if (signActDiff != "") {                
-                firstArgDiff = count(firstArgDiff, getId("screen").textContent.replace(/\s/g, ""), signActDiff);
+            else if (signActDiff != "") {
+                funRScreenSimple(scr, signScr, "");
+
+                firstArgDiff = count(firstArgDiff, scr, signActDiff);
                 getId("screen").innerHTML = triad(firstArgDiff);
                 signActDiff = sign;
                 signTrue = 1;
@@ -729,6 +765,8 @@
             }
         }
 
+        /* These other variants
+        
         // Approximate calculation
         function gamma2(z) {
             return Math.sqrt(2 * Math.PI / z) * Math.pow((1 / Math.E) * (z + 1 / (12 * z - 1 / (10 * z))), z);
@@ -750,7 +788,8 @@
                 return n;
             }
         }
-        
+        */
+
         //#endregion
 
         //#region sin, cos, tan
@@ -803,29 +842,53 @@
             }
         }
 
-        function funRScreen(symbol, change) {            
+        function funRScreen(symbol, change) {
+            var count = 1;
+            if (arguments[2] != undefined && arguments[2] != "x^y") {
+                count = 3;                
+            }
+            
             if ((signPrevScr == "+" || signPrevScr == "-") && (change == "*" || change == "÷")) {
                 var temp = getId("repeatScreen").textContent;
-                temp = "(" + temp.slice(0, temp.length - 1) + ")" + change;
+                if (temp[temp.length - 2] != ")") {
+                    temp = "(" + temp.slice(0, temp.length - count) + ")" + change;
+                } else {
+                    temp = temp.slice(0, temp.length - count) + change;
+                }
                 getId("repeatScreen").innerHTML = temp;
                 signPrevScr = ")";
             }
             else
-            if (signPrevScr == ")" && (symbol == "*" || symbol == "÷") && (change == "+" || change == "-")) {
-                var temp = getId("repeatScreen").textContent;
-                temp = temp.slice(1, temp.length - 2) + change;
-                getId("repeatScreen").innerHTML = temp;
-            }
-            else if ((symbol == "+" || symbol == "-") && (change == "*" || change == "÷") && signPrevScr == ")") {
-                var temp = getId("repeatScreen").textContent;
+                if (signPrevScr == ")" && (symbol == "*" || symbol == "÷") && (change == "+" || change == "-")) {
+                    var temp = getId("repeatScreen").textContent;
+                    temp = temp.slice(1, temp.length - count - 1) + change;
+                    getId("repeatScreen").innerHTML = temp;
+                }
+                else
+                    if ((symbol == "+" || symbol == "-") && (change == "*" || change == "÷") && signPrevScr == ")") {
+                        var temp = getId("repeatScreen").textContent;
+                        if (temp[temp.length - 2] != ")") {
+                            temp = "(" + temp.slice(0, temp.length - count) + ")" + change;
+                        } else {
+                            temp = temp.slice(0, temp.length - count) + change;
+                        }
+                        getId("repeatScreen").innerHTML = temp;
+                    }
+                    else {
+                        var temp = getId("repeatScreen").textContent;
+                        temp = temp.slice(0, temp.length - count) + change;
+                        getId("repeatScreen").innerHTML = temp;
+                    }
+        }
+        
+        function funRScreenDiff(val, change, signPrev) {
+            var temp = getId("repeatScreen").textContent;
+            if (temp[temp.length - 2] != ")") {
                 temp = "(" + temp.slice(0, temp.length - 1) + ")" + change;
-                getId("repeatScreen").innerHTML = temp;
-            }
-            else {
-                var temp = getId("repeatScreen").textContent;
+            } else {
                 temp = temp.slice(0, temp.length - 1) + change;
-                getId("repeatScreen").innerHTML = temp;
             }
+            getId("repeatScreen").innerHTML = temp;
         }
 
         function funRScreenArith(symbol, x) {
@@ -867,7 +930,12 @@
         function triad(val) {            
             var part = "";
             var k = 3;            
-            val = val.toString();            
+            var minus = "";
+            val = val.toString();
+            if (val[0] == "-") {
+                val = val.slice(1, val.length);
+                minus = "-";
+            }
             if (val.indexOf(".") > 0) {
                 part = val.slice(val.indexOf("."), val.length);
                 val = val.slice(0, val.indexOf("."));
@@ -886,7 +954,7 @@
                     val = temp;
                 }                
             }            
-            return val + part;
+            return minus + val + part;
         }
 
         // Extended mode
