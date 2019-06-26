@@ -860,28 +860,33 @@
             if (arguments[2] != undefined && arguments[2] != "x^y") {
                 count = 3;
             }
-
+            
             var temp = getId("repeatScreen").textContent;
             if (signTrue == 1 && signActDiff != "" && temp[temp.length - count - 1] == ")") {                
-                if (change == "*" || change == "÷") {
+                if (change == "*" || change == "÷") {                    
                     temp = temp.slice(0, temp.length - count) + change;
                     getId("repeatScreen").innerHTML = temp;
-                } else {
+                } else {                    
                     temp = temp.slice(1, temp.length - count - 1) + change;
                     getId("repeatScreen").innerHTML = temp;
                 }
                 return;
-            } else if (signTrue == 1 && signActDiff != "") {                
-                temp = temp.slice(0, temp.length - count) + change;
-                getId("repeatScreen").innerHTML = temp;
+            } else if (signTrue == 1 && signActDiff != "") {
+                if (change == "*" || change == "÷") {
+                    temp = "(" + temp.slice(0, temp.length - count) + ")" + change;
+                    getId("repeatScreen").innerHTML = temp;
+                } else {
+                    temp = temp.slice(0, temp.length - count) + change;
+                    getId("repeatScreen").innerHTML = temp;
+                }
                 return;
             }
-
+            
             if ((signPrevScr == "+" || signPrevScr == "-") && (change == "*" || change == "÷")) {
                 if (temp[temp.length - 2] != ")") {
                     temp = "(" + temp.slice(0, temp.length - count) + ")" + change;
                 } else {
-                    temp = temp.slice(0, temp.length - count) + change;
+                    temp = temp.slice(0, temp.length - count) + change;                    
                 }
                 getId("repeatScreen").innerHTML = temp;
                 signPrevScr = ")";
@@ -889,20 +894,26 @@
             else
                 if (signPrevScr == ")" && (symbol == "*" || symbol == "÷") && (change == "+" || change == "-")) {
                     temp = temp.slice(1, temp.length - count - 1) + change;
-                    getId("repeatScreen").innerHTML = temp;
+                    getId("repeatScreen").innerHTML = temp;                    
                 }
                 else
                     if ((symbol == "+" || symbol == "-") && (change == "*" || change == "÷") && signPrevScr == ")") {
                         if (temp[temp.length - 2] != ")") {
                             temp = "(" + temp.slice(0, temp.length - count) + ")" + change;
                         } else {
-                            temp = temp.slice(0, temp.length - count) + change;
+                            temp = temp.slice(0, temp.length - count) + change;                            
                         }
                         getId("repeatScreen").innerHTML = temp;
                     }
                     else {
-                        temp = temp.slice(0, temp.length - count) + change;
-                        getId("repeatScreen").innerHTML = temp;
+                        if ((change == "+" || change == "-") && (symbol == "*" || symbol == "÷")) {
+                            temp = temp.slice(1, temp.length - count - 1) + change;
+                            getId("repeatScreen").innerHTML = temp;
+                        }
+                        else {
+                            temp = temp.slice(0, temp.length - count) + change;
+                            getId("repeatScreen").innerHTML = temp;
+                        }
                     }
         }
         
