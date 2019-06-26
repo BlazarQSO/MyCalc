@@ -545,7 +545,7 @@
             }
 
             if (signTrue == 1 && secondArg == undefined && signActDiff == "") {
-                funRScreen(signAct, sign);
+                funRScreen(signAct, sign);                
                 signAct = sign;
                 return;
             }            
@@ -571,24 +571,29 @@
                         signTrue = 1;
                         signActDiff = "";
                         firstArgDiff = undefined;
-                    } else {
+                    } else {                        
                         funRScreen(signAct, sign, signActDiff);
                         firstArg = scr;
+                        
                         signActDiff = "";
                         firstArgDiff = undefined;
                         signAct = sign;
                     }
                 }
             }
-            else if ((signAct != "" && signActDiff == "") || (signTrue == 1 && signActDiff != "")) {
+            else if ((signAct != "" && signActDiff == "") || (signTrue == 1 && signActDiff != "")) {                
                 if (signTrue == 1 && signActDiff != "") {
-                    funRScreen(signAct, sign, signActDiff);
+                    if (signAct == "-") {                                         
+                        signAct = "+";
+                    }
+                    funRScreen(signAct, sign, signActDiff);                    
                 } else {
                     funRScreenSimple(scr, sign, signAct);
                 }                
-
-                firstArg = count(firstArg, scr, signAct);
+                
+                firstArg = count(firstArg, scr, signAct);                
                 getId("screen").innerHTML = triad(firstArg);
+                                
                 signAct = sign;
                 signTrue = 1;
                 signActDiff = "";
@@ -629,23 +634,31 @@
                 signActDiff = "";                
                 signMark = "";
             }
-
+            
             var scr = getId("screen").textContent.replace(/\s/g, "");
             if (signActDiff == "" || (signTrue == 1 && secondArg == undefined)) {
                 firstArgDiff = scr                
-                if (signActDiff == "" && signTrue != 1) {
-                    funRScreenSimple(firstArgDiff, signScr, signAct);
+                if (signActDiff == "" && signTrue != 1) {                    
+                    funRScreenSimple(firstArgDiff, signScr, signAct);                    
                 }
-                else if (signActDiff == "" && signTrue == 1) {
-                    funRScreenDiff(firstArgDiff, signScr, signAct);
+                else if (signActDiff == "" && signTrue == 1) {                    
+                    funRScreenDiff(firstArgDiff, signScr, signAct);                    
                     firstArg = 0;
-                }                
+                    signAct = "+";
+                } else if (signActDiff != "" && signTrue == 1) {                    
+                    funRScreenDiff("", signScr, signScr);
+                }
+                
                 signActDiff = sign;                
                 signTrue = 1;
             }
-            else if (signActDiff != "") {
-                funRScreenSimple(scr, signScr, "");
-
+            else if (signActDiff != "") {                
+                if (signTrue != 1) {
+                    funRScreenSimple(scr, signScr, signAct);
+                } else {                    
+                    funRScreenDiff("", signScr, signScr)
+                }
+                
                 firstArgDiff = count(firstArgDiff, scr, signActDiff);
                 getId("screen").innerHTML = triad(firstArgDiff);
                 signActDiff = sign;
@@ -664,11 +677,11 @@
                     return cleanUp(Number(x) - Number(y));
                 }
                 case "*": {
-                    return cleanUp(Number(x) * Number(y));
+                    return myCleanUp(Number(x) * Number(y));
                 }
                 case "÷": {
                     if (y != 0) {
-                        return cleanUp(Number(x) / Number(y)); 
+                        return myCleanUp(Number(x) / Number(y));
                     } else {                        
                         return undefined;
                     }
@@ -677,26 +690,26 @@
                     return Number(myCleanUp(Number(x) * Number(x)));
                 }
                 case "x^3": {
-                    return cleanUp(Number(x) * Number(x) * Number(x));
+                    return myCleanUp(Number(x) * Number(x) * Number(x));
                 }
                 case "x^y": {
-                    return cleanUp(Math.pow(x, y));
+                    return myCleanUp(Math.pow(x, y));
                 }
                 case "√": {
-                    return Math.sqrt(Number(x));
+                    return myCleanUp(Math.sqrt(Number(x)));
                 }
                 case "10^x": {
                     return Math.pow(10, x); 
                 }
                 case "1/x": {
                     if (x != 0) {
-                        return cleanUp(1 / Number(x));
+                        return myCleanUp(1 / Number(x));
                     } else {
                         return undefined;
                     }
                 }
                 case "n!": {
-                    return cleanUp(factorial(Number(x)));
+                    return myCleanUp(factorial(Number(x)));
                 }
                 case "log": {
                     return cleanUp(Math.log10(x));
@@ -718,10 +731,10 @@
                 }
                 case "y√x": {
                     if (x < 0 && x % 2 == 1) {
-                        return -Math.pow(-x, 1 / y);
+                        return myCleanUp(-Math.pow(-x, 1 / y));
                     }
                     else {
-                        return Math.pow(x, 1 / y);
+                        return myCleanUp(Math.pow(x, 1 / y));
                     }
                 }
                 case "mod": {
@@ -845,11 +858,26 @@
         function funRScreen(symbol, change) {
             var count = 1;
             if (arguments[2] != undefined && arguments[2] != "x^y") {
-                count = 3;                
+                count = 3;
             }
-            
+
+            var temp = getId("repeatScreen").textContent;
+            if (signTrue == 1 && signActDiff != "" && temp[temp.length - count - 1] == ")") {                
+                if (change == "*" || change == "÷") {
+                    temp = temp.slice(0, temp.length - count) + change;
+                    getId("repeatScreen").innerHTML = temp;
+                } else {
+                    temp = temp.slice(1, temp.length - count - 1) + change;
+                    getId("repeatScreen").innerHTML = temp;
+                }
+                return;
+            } else if (signTrue == 1 && signActDiff != "") {                
+                temp = temp.slice(0, temp.length - count) + change;
+                getId("repeatScreen").innerHTML = temp;
+                return;
+            }
+
             if ((signPrevScr == "+" || signPrevScr == "-") && (change == "*" || change == "÷")) {
-                var temp = getId("repeatScreen").textContent;
                 if (temp[temp.length - 2] != ")") {
                     temp = "(" + temp.slice(0, temp.length - count) + ")" + change;
                 } else {
@@ -860,13 +888,11 @@
             }
             else
                 if (signPrevScr == ")" && (symbol == "*" || symbol == "÷") && (change == "+" || change == "-")) {
-                    var temp = getId("repeatScreen").textContent;
                     temp = temp.slice(1, temp.length - count - 1) + change;
                     getId("repeatScreen").innerHTML = temp;
                 }
                 else
                     if ((symbol == "+" || symbol == "-") && (change == "*" || change == "÷") && signPrevScr == ")") {
-                        var temp = getId("repeatScreen").textContent;
                         if (temp[temp.length - 2] != ")") {
                             temp = "(" + temp.slice(0, temp.length - count) + ")" + change;
                         } else {
@@ -875,7 +901,6 @@
                         getId("repeatScreen").innerHTML = temp;
                     }
                     else {
-                        var temp = getId("repeatScreen").textContent;
                         temp = temp.slice(0, temp.length - count) + change;
                         getId("repeatScreen").innerHTML = temp;
                     }
@@ -883,10 +908,21 @@
         
         function funRScreenDiff(val, change, signPrev) {
             var temp = getId("repeatScreen").textContent;
-            if (temp[temp.length - 2] != ")") {
-                temp = "(" + temp.slice(0, temp.length - 1) + ")" + change;
-            } else {
-                temp = temp.slice(0, temp.length - 1) + change;
+            var count = 1;
+            if (signActDiff == "mod" || signActDiff == "y√x") {
+                count = 3;
+            }
+            
+            if (signActDiff == "") {                
+                if (temp[temp.length - 2] != ")" && temp != "") {
+                    temp = "(" + temp.slice(0, temp.length - 1) + ")" + change;
+                } else if (temp != "") {
+                    temp = temp.slice(0, temp.length - 1) + change;
+                } else if (temp == "") {
+                    temp = getId("screen").textContent + change;
+                }
+            } else {                
+                temp = temp.slice(0, temp.length - count) + change;
             }
             getId("repeatScreen").innerHTML = temp;
         }
@@ -898,27 +934,27 @@
             
             if (symbol == "%") {
                 if (rScrOperation == "") {
-                    getId("repeatScreen").innerHTML += x + symbol + "(" + firstArg + ")";
-                    rScrOperation = x + symbol + "(" + firstArg + ")";
+                    getId("repeatScreen").innerHTML += x + symbol + "{" + firstArg + "}";
+                    rScrOperation = x + symbol + "{" + firstArg + "}";
                 }
                 else {
                     var temp = getId("repeatScreen").textContent;
                     temp = temp.slice(0, temp.length - rScrOperation.length);
-                    getId("repeatScreen").innerHTML = temp + x + symbol + "(" + firstArg + ")";
-                    rScrOperation = x + symbol + "(" + firstArg + ")";
+                    getId("repeatScreen").innerHTML = temp + x + symbol + "{" + firstArg + "}";
+                    rScrOperation = x + symbol + "{" + firstArg + "}";
                 }
                 return;
             }            
 
             if (rScrOperation == "") {
-                getId("repeatScreen").innerHTML += symbol + "(" + x + ")";
-                rScrOperation = symbol + "(" + x + ")";
+                getId("repeatScreen").innerHTML += symbol + "{" + x + "}";
+                rScrOperation = symbol + "{" + x + "}";
             }
             else {
                 var temp = getId("repeatScreen").textContent;
                 temp = temp.slice(0, temp.length - rScrOperation.length);
-                getId("repeatScreen").innerHTML = temp + symbol + "(" + rScrOperation + ")";
-                rScrOperation = symbol + "(" + rScrOperation + ")";
+                getId("repeatScreen").innerHTML = temp + symbol + "{" + rScrOperation + "}";
+                rScrOperation = symbol + "{" + rScrOperation + "}";
             }
         }        
 
