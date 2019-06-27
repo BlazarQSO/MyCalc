@@ -1,18 +1,18 @@
 ﻿(function () {
     window.onload = function () {
-        
+
         var firstArg = undefined;       // First argument of arithmetic operation.
         var secondArg = undefined;      // Second argument of arithmetic operation.
         var firstArgDiff = undefined;   // First argument of difficult arithmetic operation.
-        
+
         var sign = "";                  // This argument contains a sign of an arithmetic operation.
         var signAct = "";               // This argument contains an arithmetic action.
         var signActDiff = "";           // This argument contains a difficult arithmetic action.
         var signTrue = 0;               // An arithmetic operation has been pushed or not.
         var signMark = "";
-        
-        var memory = undefined;         
-            
+
+        var memory = undefined;
+
         var signPrevScr = "";           // This argument is a previous sign for correct data input.
         var rScrOperation = "";         // This argument is a writing of arithmetic operation. 
 
@@ -20,14 +20,14 @@
         var buttons = {
 
             "result": {
-                title: "=",                
-                onClickHandler: function (e) {                    
+                title: "=",
+                onClickHandler: function (e) {
                     return function () {
                         if ((firstArg != undefined && signAct != "") || firstArgDiff != undefined) {
                             if (secondArg == undefined) {
                                 secondArg = getId("screen").textContent.replace(/\s/g, "");;
-                            } 
-                            
+                            }
+
                             if (signActDiff == "") {
                                 firstArg = count(firstArg, secondArg, signAct)
                                 getId("screen").innerHTML = triad(firstArg);
@@ -42,7 +42,7 @@
                                     getId("screen").innerHTML = triad(firstArg);
                                     binOctHex(firstArg);
                                     firstArgDiff = undefined;
-                                    signActDiff = "";                                    
+                                    signActDiff = "";
                                     signTrue = 1;
                                     signMark = "=";
                                 }
@@ -52,18 +52,18 @@
                                     binOctHex(firstArgDiff);
                                     signTrue = 1;
                                     signMark = "=";
-                                }                                
+                                }
                             }
                         }
                         getId("repeatScreen").innerHTML = "";
                         signPrevScr = "";
-                        rScrOperation = "";                        
+                        rScrOperation = "";
                     };
                 }
             },
 
             //#region region №1 These Buttons only add or remove a value on the calculator screen.
-            
+
             "b1": {
                 title: "1",
                 value: 1,
@@ -165,20 +165,20 @@
                 }
             },
             "dot": {
-                title: ".",                
+                title: ".",
                 onClickHandler: function (e) {
                     var self = this.title
                     return function () {
-                        if (getId("screen").textContent.indexOf(".") == -1 && signTrue == 0) {
+                        if (getId("screen").textContent.indexOf(".") == -1) {
                             addSign(self);
-                        } 
+                        }
                     };
                 }
             },
             "DEL": {
-                title: "DEL",                
-                onClickHandler: function (e) {                    
-                    return function () {                        
+                title: "DEL",
+                onClickHandler: function (e) {
+                    return function () {
                         if (signTrue == 0 && rScrOperation == "") {
 
                             var val = getId("screen").textContent;
@@ -189,17 +189,17 @@
                             } else {
                                 getId("screen").innerHTML = "0";
                             }
-                            
+
                             binOctHex(val);
                         }
                     };
                 }
             },
             "C": {
-                title: "C",                
-                onClickHandler: function (e) {                    
+                title: "C",
+                onClickHandler: function (e) {
                     return function () {
-                        getId("screen").innerHTML = "0";                        
+                        getId("screen").innerHTML = "0";
                         getId("repeatScreen").innerHTML = "";
                         firstArg = undefined;
                         secondArg = undefined;
@@ -208,9 +208,10 @@
                         signAct = "";
                         signActDiff = "";
                         signMark = "";
-                        signTrue = 0;                        
+                        signTrue = 0;
                         signPrevScr = "";
                         rScrOperation = "";
+                        hideBtn("C");
                         binOctHex(0);
                     };
                 }
@@ -222,7 +223,7 @@
                     var self = this.value
                     var title = this.title
                     return function () {
-                        addSign(self, title);                        
+                        addSign(self, title);
                     };
                 }
             },
@@ -230,9 +231,9 @@
             //#endregion
 
             //#region region №2 These are buttons of arithmetic operations.
-     
+
             "sum": {
-                title: "+",                
+                title: "+",
                 onClickHandler: function (e) {
                     var self = this.title
                     return function () {
@@ -244,13 +245,13 @@
                 title: "-",
                 onClickHandler: function (e) {
                     var self = this.title
-                    return function () {                        
+                    return function () {
                         arithmetic(self);
                     };
                 }
             },
             "mult": {
-                title: "*",                
+                title: "*",
                 onClickHandler: function (e) {
                     var self = this.title
                     return function () {
@@ -259,7 +260,7 @@
                 }
             },
             "div": {
-                title: "÷",                
+                title: "÷",
                 onClickHandler: function (e) {
                     var self = this.title
                     return function () {
@@ -269,11 +270,11 @@
             },
 
             //#endregion
-            
+
             //#region region №3 These are buttons of functions.                      
 
             "Xdeg2": {
-                title: "x^2",                
+                title: "x^2",
                 onClickHandler: function (e) {
                     var self = this.title;
                     return function () {
@@ -283,8 +284,8 @@
             },
             "Xdeg3": {
                 title: "x^3",
-                onClickHandler: function (e) {                    
-                    var self = this.title;                    
+                onClickHandler: function (e) {
+                    var self = this.title;
                     return function () {
                         arithmeticFunc(self, "cube");
                     };
@@ -292,7 +293,7 @@
             },
             "√": {
                 title: "√",
-                onClickHandler: function (e) {                    
+                onClickHandler: function (e) {
                     var self = this.title;
                     return function () {
                         arithmeticFunc(self, "√");
@@ -301,7 +302,7 @@
             },
             "b10degX": {
                 title: "10^x",
-                onClickHandler: function (e) {                    
+                onClickHandler: function (e) {
                     var self = this.title;
                     return function () {
                         arithmeticFunc(self, "10^");
@@ -310,16 +311,16 @@
             },
             "b1divX": {
                 title: "1/x",
-                onClickHandler: function (e) {                    
+                onClickHandler: function (e) {
                     var self = this.title;
                     return function () {
                         arithmeticFunc(self, "1/");
                     };
                 }
-            },            
+            },
             "nfactr": {
                 title: "n!",
-                onClickHandler: function (e) {                    
+                onClickHandler: function (e) {
                     var self = this.title;
                     return function () {
                         arithmeticFunc(self, "fact");
@@ -328,7 +329,7 @@
             },
             "log": {
                 title: "log",
-                onClickHandler: function (e) {                    
+                onClickHandler: function (e) {
                     var self = this.title;
                     return function () {
                         arithmeticFunc(self, "log");
@@ -337,7 +338,7 @@
             },
             "ln": {
                 title: "ln",
-                onClickHandler: function (e) {                    
+                onClickHandler: function (e) {
                     var self = this.title;
                     return function () {
                         arithmeticFunc(self, "ln");
@@ -346,16 +347,16 @@
             },
             "edegX": {
                 title: "e^x",
-                onClickHandler: function (e) {                    
+                onClickHandler: function (e) {
                     var self = this.title;
                     return function () {
                         arithmeticFunc(self, "e^");
                     };
                 }
-            },         
+            },
             "sin": {
                 title: "sin",
-                onClickHandler: function (e) {                    
+                onClickHandler: function (e) {
                     var self = this.title;
                     return function () {
                         arithmeticFunc(self, "sin");
@@ -364,7 +365,7 @@
             },
             "cos": {
                 title: "cos",
-                onClickHandler: function (e) {                    
+                onClickHandler: function (e) {
                     var self = this.title;
                     return function () {
                         arithmeticFunc(self, "cos");
@@ -373,7 +374,7 @@
             },
             "tan": {
                 title: "tan",
-                onClickHandler: function (e) {                    
+                onClickHandler: function (e) {
                     var self = this.title;
                     return function () {
                         arithmeticFunc(self, "tan");
@@ -407,7 +408,7 @@
                 title: "y√x",
                 onClickHandler: function (e) {
                     var self = this.title;
-                    return function() {
+                    return function () {
                         arithmeticFuncDiff(self, "y√x");
                     }
                 }
@@ -423,12 +424,12 @@
             },
 
             //#endregion
-            
+
             //#region region №5 These are service functions.
 
             "MC": {
                 title: "MC",
-                onClickHandler: function (e) {                    
+                onClickHandler: function (e) {
                     return function () {
                         memory = undefined;
                         getId("M").innerHTML = "0";
@@ -437,26 +438,32 @@
             },
             "MR": {
                 title: "MR",
-                onClickHandler: function (e) {                    
+                onClickHandler: function (e) {
                     return function () {
                         if (memory != undefined) {
                             getId("screen").innerHTML = triad(memory);
                             binOctHex(memory);
+                            if (rScrOperation != "") {
+                                var temp = getId("repeatScreen").textContent;
+                                temp = temp.slice(0, temp.length - rScrOperation.length);
+                                getId("repeatScreen").innerHTML = temp;
+                                rScrOperation = "";
+                            }
                             signTrue = 0;
-                            secondArg = undefined;                            
+                            secondArg = undefined;
                         }
                     };
                 }
             },
             "Msum": {
                 title: "M+",
-                onClickHandler: function (e) {                    
+                onClickHandler: function (e) {
                     return function () {
                         if (memory == undefined) {
                             memory = Number(getId("screen").textContent.replace(/\s/g, ""));
                             getId("M").innerHTML = triad(memory);
                         } else {
-                            memory = Number(memory) + Number(getId("screen").textContent.replace(/\s/g, ""));
+                            memory = cleanUp(Number(memory) + Number(getId("screen").textContent.replace(/\s/g, "")));
                             getId("M").innerHTML = triad(memory);
                         }
                     };
@@ -464,13 +471,13 @@
             },
             "Msub": {
                 title: "M-",
-                onClickHandler: function (e) {                    
+                onClickHandler: function (e) {
                     return function () {
                         if (memory == undefined) {
-                            memory = Number(0) - Number(getId("screen").textContent.replace(/\s/g, ""));
+                            memory = cleanUp(Number(0) - Number(getId("screen").textContent.replace(/\s/g, "")));
                             getId("M").innerHTML = triad(memory);
                         } else {
-                            memory = Number(memory) - Number(getId("screen").textContent.replace(/\s/g, ""));
+                            memory = cleanUp(Number(memory) - Number(getId("screen").textContent.replace(/\s/g, "")));
                             getId("M").innerHTML = triad(memory);
                         }
                     };
@@ -478,14 +485,13 @@
             },
             "MS": {
                 title: "MS",
-                onClickHandler: function (e) {                    
+                onClickHandler: function (e) {
                     return function () {
                         memory = Number(getId("screen").textContent.replace(/\s/g, ""));
                         getId("M").innerHTML = triad(memory);
                     };
                 }
             },
-
             "btn": {
                 title: "btn",
                 onClickHandler: function (e) {
@@ -503,35 +509,62 @@
                 }
             },
             //#endregion
-            
         }
-               
+
         // Add a sign to screen of calculator (region №1)
-        function addSign(val) {            
-            if ((getId("screen").textContent != "0" || val == ".")
-                && signTrue == 0 && arguments[1] != "π")
-            {
+        function addSign(val) {
+            var temp = getId("screen").textContent.replace(/\s/g, "");
+            secondArg = undefined;
+            
+            if (rScrOperation != "") {
+                var t = getId("repeatScreen").textContent;
+                t = t.slice(0, t.length - rScrOperation.length);
+                getId("repeatScreen").innerHTML = t;
+                rScrOperation = "";
+
+                if (val != ".") {
+                    getId("screen").innerHTML = val;
+                    binOctHex(triad(val));
+                } else {
+                    getId("screen").innerHTML = "0.";
+                    binOctHex(0);
+                }
+                
+                signTrue = 0;
+                return;
+            }
+
+            if ((temp == "0" || signTrue == 1) && val == ".") {
+                getId("screen").innerHTML = "0.";
+                signTrue = 0;
+                
+                binOctHex(0);
+                return;
+            }
+
+            if (arguments[1] == "π") {
                 if (rScrOperation != "") {
-                    getId("screen").innerHTML = triad(val);
-                    var temp = getId("repeatScreen").textContent;
                     temp = temp.slice(0, temp.length - rScrOperation.length);
                     getId("repeatScreen").innerHTML = temp;
                     rScrOperation = "";
                 }
-                else {
-                    var temp = getId("screen").textContent + val;                    
-                    temp = temp.replace(/\s/g, "");                    
-                    getId("screen").innerHTML = triad(temp);
-                    binOctHex(temp);
-                }
-            }
-            else {
                 getId("screen").innerHTML = val;
                 binOctHex(val);
                 signTrue = 0;
+
+                return;
             }
-                        
-            secondArg = undefined;
+
+            if (temp != "0" && signTrue == 0) {
+                temp = temp + val;
+                temp = temp.replace(/\s/g, "");
+                getId("screen").innerHTML = triad(temp);                
+            } else {                
+                getId("screen").innerHTML = val;
+            }
+            signTrue = 0;
+            temp = getId("screen").textContent.replace(/\s/g, "");            
+            binOctHex(getId("screen").textContent.replace(/\s/g, ""));            
         }
 
         // These are arithmetic operations (region №2)
@@ -539,19 +572,19 @@
             if (signMark == "=") {
                 firstArg = undefined;
                 firstArgDiff = undefined;
-                signActDiff = "";        
+                signActDiff = "";
                 signAct = "";
                 signMark = "";
             }
 
             if (signTrue == 1 && secondArg == undefined && signActDiff == "") {
-                funRScreen(signAct, sign);                
-                signAct = sign;
+                funRScreen(signAct, sign);
+                signAct = sign;                
                 return;
-            }            
-            
+            }
+                     
             var scr = getId("screen").textContent.replace(/\s/g, "");
-
+            
             if (firstArg == undefined || secondArg != undefined) {
                 if (signActDiff == "") {
                     funRScreenSimple(scr, sign, signAct);
@@ -566,12 +599,12 @@
                         firstArg = count(firstArgDiff, scr, signActDiff);
                         getId("screen").innerHTML = triad(firstArg);
                         funRScreenSimple(scr, sign, signAct);
-
+                        
                         signAct = sign;
                         signTrue = 1;
                         signActDiff = "";
                         firstArgDiff = undefined;
-                    } else {                        
+                    } else {
                         funRScreen(signAct, sign, signActDiff);
                         firstArg = scr;
                         
@@ -581,43 +614,58 @@
                     }
                 }
             }
-            else if ((signAct != "" && signActDiff == "") || (signTrue == 1 && signActDiff != "")) {                
-                if (signTrue == 1 && signActDiff != "") {
-                    if (signAct == "-") {                                         
-                        signAct = "+";
+            else
+                if ((signAct != "" && signActDiff == "") || (signTrue == 1 && signActDiff != "")) {
+                    if (signTrue == 1 && signActDiff != "") {
+                        if (signAct == "-") {
+                            signAct = "+";
+                        }
+                        funRScreen(signAct, sign, signActDiff);
+                    } else {
+                        funRScreenSimple(scr, sign, signAct);
                     }
-                    funRScreen(signAct, sign, signActDiff);                    
-                } else {
-                    funRScreenSimple(scr, sign, signAct);
-                }                
-                
-                firstArg = count(firstArg, scr, signAct);                
-                getId("screen").innerHTML = triad(firstArg);
-                                
-                signAct = sign;
-                signTrue = 1;
-                signActDiff = "";
-                firstArgDiff = undefined;                
-            }
-            else if (signActDiff != "") {
-                firstArgDiff = count(firstArgDiff, scr, signActDiff);
-                funRScreenSimple(scr, sign, signAct);
+                    firstArg = count(firstArg, scr, signAct);
+                    getId("screen").innerHTML = triad(firstArg);
 
-                firstArg = count(firstArg, firstArgDiff, signAct);
-                getId("screen").innerHTML = triad(firstArg);
-                firstArgDiff = undefined;
-                signActDiff = "";
-                signAct = sign;                
-                signTrue = 1;
-            }
-                        
+                    signAct = sign;
+                    signTrue = 1;
+                    signActDiff = "";
+                    firstArgDiff = undefined;
+                }
+                else
+                    if (signActDiff != "") {                        
+                        if (signActDiff == "mod" && (signAct == "*" || signAct == "÷")) {
+                            firstArg = count(firstArg, firstArgDiff, signAct);  
+                            firstArg = count(firstArg, scr, signActDiff);                           
+                        }
+                        else {
+                            firstArgDiff = count(firstArgDiff, scr, signActDiff);
+                            firstArg = count(firstArg, firstArgDiff, signAct);                            
+                        }
+
+                        funRScreenSimple(scr, sign, signAct);
+                        getId("screen").innerHTML = triad(firstArg);
+
+                        firstArgDiff = undefined;
+                        signActDiff = "";
+                        signAct = sign;
+                        signTrue = 1;
+                    }
+                    else {
+                        funRScreenSimple(scr, sign, signAct);
+                        firstArg = getId("screen").textContent.replace(/\s/g, "");
+                        signAct = sign;
+                        signTrue = 1;
+                        rScrOperation = "";
+                    }
+
             binOctHex(getId("screen").textContent.replace(/\s/g, ""));
         }
 
         // These are arithmetic functions (region №3)
         function arithmeticFunc(func, signScr) {
             var src = getId("screen").textContent.replace(/\s/g, "");
-            var result = count(src, firstArg, func);                   
+            var result = count(src, firstArg, func);
             getId("screen").innerHTML = triad(result);
             signTrue = 0;
 
@@ -631,34 +679,43 @@
                 firstArg = undefined;
                 firstArgDiff = undefined;
                 signAct = "";
-                signActDiff = "";                
+                signActDiff = "";
                 signMark = "";
             }
-            
+
             var scr = getId("screen").textContent.replace(/\s/g, "");
             if (signActDiff == "" || (signTrue == 1 && secondArg == undefined)) {
-                firstArgDiff = scr                
-                if (signActDiff == "" && signTrue != 1) {                    
-                    funRScreenSimple(firstArgDiff, signScr, signAct);                    
-                }
-                else if (signActDiff == "" && signTrue == 1) {                    
-                    funRScreenDiff(firstArgDiff, signScr, signAct);                    
-                    firstArg = 0;
-                    signAct = "+";
-                } else if (signActDiff != "" && signTrue == 1) {                    
-                    funRScreenDiff("", signScr, signScr);
-                }
+
+                firstArgDiff = scr
                 
-                signActDiff = sign;                
+                if (signActDiff == "" && signTrue != 1) {
+                    funRScreenSimple(firstArgDiff, signScr, signAct);
+                }
+                else if (signActDiff == "" && signTrue == 1) {
+                    funRScreenDiff(firstArgDiff, signScr, signAct);
+                    firstArg = 0;
+                    signAct = "+";                    
+                } else if (signActDiff != "" && signTrue == 1) {
+                    funRScreenDiff("", signScr, signScr);                    
+                }
+
+                if (sign == "mod" && (signAct == "*" || signAct == "÷")) {                  
+                    var temp = getId("repeatScreen").textContent;
+                    temp = temp.slice(0, temp.length - sign.length);
+                    temp = "(" + temp + ")" + sign;
+                    getId("repeatScreen").innerHTML = temp;                
+                }          
+
+                signActDiff = sign;
                 signTrue = 1;
             }
-            else if (signActDiff != "") {                
+            else if (signActDiff != "") {
                 if (signTrue != 1) {
                     funRScreenSimple(scr, signScr, signAct);
-                } else {                    
+                } else {
                     funRScreenDiff("", signScr, signScr)
                 }
-                
+
                 firstArgDiff = count(firstArgDiff, scr, signActDiff);
                 getId("screen").innerHTML = triad(firstArgDiff);
                 signActDiff = sign;
@@ -667,59 +724,76 @@
 
             binOctHex(getId("screen").textContent.replace(/\s/g, ""));
         }
-        
+
         function count(x, y, sign) {
             switch (sign) {
                 case "+": {
-                    return cleanUp(Number(x) + Number(y));                    
+                    return cleanUp(Number(x) + Number(y));
                 }
                 case "-": {
                     return cleanUp(Number(x) - Number(y));
                 }
                 case "*": {
-                    return myCleanUp(Number(x) * Number(y));
+                    return myCleanUp(cleanUp(Number(x) * Number(y)));
                 }
                 case "÷": {
                     if (y != 0) {
-                        return myCleanUp(Number(x) / Number(y));
-                    } else {                        
+                        return myCleanUp(cleanUp(Number(x) / Number(y)));
+                    } else {
+                        hideBtn();
                         return undefined;
                     }
                 }
-                case "x^2": {                    
-                    return Number(myCleanUp(Number(x) * Number(x)));
+                case "x^2": {
+                    return Number(myCleanUp(cleanUp(Number(x) * Number(x))));
                 }
                 case "x^3": {
-                    return myCleanUp(Number(x) * Number(x) * Number(x));
+                    return myCleanUp(cleanUp(Number(x) * Number(x) * Number(x)));
                 }
                 case "x^y": {
-                    return myCleanUp(Math.pow(x, y));
+                    return myCleanUp(cleanUp(Math.pow(x, y)));
                 }
                 case "√": {
-                    return myCleanUp(Math.sqrt(Number(x)));
+                    if (x > 0) {
+                        return myCleanUp(cleanUp(Math.sqrt(Number(x)))); 
+                    } else {
+                        hideBtn();
+                        return undefined;
+                    }                    
                 }
                 case "10^x": {
-                    return Math.pow(10, x); 
+                    return myCleanUp(cleanUp(Math.pow(10, x)));
                 }
                 case "1/x": {
                     if (x != 0) {
-                        return myCleanUp(1 / Number(x));
+                        return myCleanUp(cleanUp(1 / Number(x)));
                     } else {
+                        hideBtn();
                         return undefined;
                     }
                 }
                 case "n!": {
-                    return myCleanUp(factorial(Number(x)));
+                    return myCleanUp(cleanUp(factorial(Number(x))));
                 }
                 case "log": {
-                    return cleanUp(Math.log10(x));
+                    if (x != 0) {
+                        return myCleanUp(cleanUp(Math.log10(x)));
+                    } else {
+                        hideBtn();
+                        return undefined;
+                    }
                 }
                 case "ln": {
-                    return cleanUp(Math.log(x));
+                    if (x != 0) {
+                        return myCleanUp(cleanUp(Math.log(x)));
+                    } else {
+                        hideBtn();
+                        return undefined;
+                    }
                 }
                 case "e^x": {
-                    return cleanUp(Math.exp(x));
-                }                
+                    return myCleanUp(cleanUp(Math.exp(x)));
+                }
                 case "sin": {
                     return trigonSin(x);
                 }
@@ -727,37 +801,37 @@
                     return trigonCos(x);
                 }
                 case "tan": {
-                    return trigonTan(x);
+                    return myCleanUp(cleanUp(trigonTan(x)));
                 }
                 case "y√x": {
                     if (x < 0 && x % 2 == 1) {
-                        return myCleanUp(-Math.pow(-x, 1 / y));
+                        return myCleanUp(cleanUp(- Math.pow(-x, 1 / y)));
                     }
                     else {
-                        return myCleanUp(Math.pow(x, 1 / y));
+                        return myCleanUp(cleanUp(Math.pow(x, 1 / y)));
                     }
                 }
                 case "mod": {
-                    return x % y;
+                    return myCleanUp(cleanUp((x % y)));
                 }
                 case "%": {
                     if (y == undefined) {
                         y = x;
                         firstArg = x;
                     }
-                    return y * x / 100;
+                    return myCleanUp(cleanUp(y * x / 100));
                 }
             }
         }
-        
+
         // #region n!        
-        function factorial(n) {            
+        function factorial(n) {
             if (n % 1 == 0 && n < 0) {
                 return n;
             }
             else {
                 return gamma(n + 1);
-            }            
+            }
         }
 
         // Gamma function (exact calculation)
@@ -831,21 +905,21 @@
         }
 
         //#endregion
-        
+
         //#region These functions add operations to the second screen.
-        
+
         function funRScreenSimple(val, sign, signPrev) {
             if (val[val.length - 1] == ".") {
                 val = val.slice(0, val.length - 1);
-            }            
-            
+            }
+
             if (rScrOperation != "") {
                 val = "";
                 rScrOperation = "";
             }
 
             if ((sign == "*" || sign == "÷") && (signPrev == "+" || signPrev == "-")) {
-                var temp = "(" + getId("repeatScreen").textContent + val +")" +  sign;
+                var temp = "(" + getId("repeatScreen").textContent + val + ")" + sign;
                 getId("repeatScreen").innerHTML = temp;
                 signPrevScr = ")";
             }
@@ -862,34 +936,34 @@
             }
             
             var temp = getId("repeatScreen").textContent;
-            if (signTrue == 1 && signActDiff != "" && temp[temp.length - count - 1] == ")") {                
-                if (change == "*" || change == "÷") {                    
+            if (signTrue == 1 && signActDiff != "" && temp[temp.length - count - 1] == ")") {
+                if (change == "*" || change == "÷") {
                     temp = temp.slice(0, temp.length - count) + change;
-                    getId("repeatScreen").innerHTML = temp;
-                } else {                    
+                    getId("repeatScreen").innerHTML = temp;            
+                } else {
                     temp = temp.slice(1, temp.length - count - 1) + change;
-                    getId("repeatScreen").innerHTML = temp;
+                    getId("repeatScreen").innerHTML = temp;                    
                 }
                 return;
             } else if (signTrue == 1 && signActDiff != "") {
                 if (change == "*" || change == "÷") {
                     temp = "(" + temp.slice(0, temp.length - count) + ")" + change;
-                    getId("repeatScreen").innerHTML = temp;
+                    getId("repeatScreen").innerHTML = temp;                    
                 } else {
                     temp = temp.slice(0, temp.length - count) + change;
-                    getId("repeatScreen").innerHTML = temp;
+                    getId("repeatScreen").innerHTML = temp;                    
                 }
                 return;
             }
-            
+
             if ((signPrevScr == "+" || signPrevScr == "-") && (change == "*" || change == "÷")) {
                 if (temp[temp.length - 2] != ")") {
                     temp = "(" + temp.slice(0, temp.length - count) + ")" + change;
                 } else {
-                    temp = temp.slice(0, temp.length - count) + change;                    
+                    temp = temp.slice(0, temp.length - count) + change;
                 }
                 getId("repeatScreen").innerHTML = temp;
-                signPrevScr = ")";
+                signPrevScr = ")";                
             }
             else
                 if (signPrevScr == ")" && (symbol == "*" || symbol == "÷") && (change == "+" || change == "-")) {
@@ -901,14 +975,15 @@
                         if (temp[temp.length - 2] != ")") {
                             temp = "(" + temp.slice(0, temp.length - count) + ")" + change;
                         } else {
-                            temp = temp.slice(0, temp.length - count) + change;                            
+                            temp = temp.slice(0, temp.length - count) + change;
                         }
                         getId("repeatScreen").innerHTML = temp;
                     }
                     else {
-                        if ((change == "+" || change == "-") && (symbol == "*" || symbol == "÷")) {
-                            temp = temp.slice(1, temp.length - count - 1) + change;
-                            getId("repeatScreen").innerHTML = temp;
+                        if ((change == "+" || change == "-") && (symbol == "*" || symbol == "÷")
+                            && temp[temp.length - 2] != "}" && temp[temp.length - 2] == ")") {
+                            temp = temp.slice(1, temp.length - count - 1) + change;                            
+                            getId("repeatScreen").innerHTML = temp;                            
                         }
                         else {
                             temp = temp.slice(0, temp.length - count) + change;
@@ -916,15 +991,15 @@
                         }
                     }
         }
-        
+
         function funRScreenDiff(val, change, signPrev) {
             var temp = getId("repeatScreen").textContent;
             var count = 1;
             if (signActDiff == "mod" || signActDiff == "y√x") {
                 count = 3;
             }
-            
-            if (signActDiff == "") {                
+
+            if (signActDiff == "") {
                 if (temp[temp.length - 2] != ")" && temp != "") {
                     temp = "(" + temp.slice(0, temp.length - 1) + ")" + change;
                 } else if (temp != "") {
@@ -932,7 +1007,7 @@
                 } else if (temp == "") {
                     temp = getId("screen").textContent + change;
                 }
-            } else {                
+            } else {
                 temp = temp.slice(0, temp.length - count) + change;
             }
             getId("repeatScreen").innerHTML = temp;
@@ -942,7 +1017,7 @@
             if (x[x.length - 1] == ".") {
                 x = x.slice(0, x.length - 1);
             }
-            
+
             if (symbol == "%") {
                 if (rScrOperation == "") {
                     getId("repeatScreen").innerHTML += x + symbol + "{" + firstArg + "}";
@@ -955,7 +1030,7 @@
                     rScrOperation = x + symbol + "{" + firstArg + "}";
                 }
                 return;
-            }            
+            }
 
             if (rScrOperation == "") {
                 getId("repeatScreen").innerHTML += symbol + "{" + x + "}";
@@ -967,51 +1042,56 @@
                 getId("repeatScreen").innerHTML = temp + symbol + "{" + rScrOperation + "}";
                 rScrOperation = symbol + "{" + rScrOperation + "}";
             }
-        }        
+        }
 
         //#endregion
 
         //#region These are auxiliary functions 
-        
+
         // This function divides number to triad 
-        function triad(val) {            
-            var part = "";
-            var k = 3;            
-            var minus = "";
-            val = val.toString();
-            if (val[0] == "-") {
-                val = val.slice(1, val.length);
-                minus = "-";
+        function triad(val) {
+            if (val == undefined || val == Infinity || val == -Infinity) {
+                return val;
             }
-            if (val.indexOf(".") > 0) {
-                part = val.slice(val.indexOf("."), val.length);
-                val = val.slice(0, val.indexOf("."));
+            else {
+                var part = "";
+                var k = 3;
+                var minus = "";
+                val = val.toString();
+                if (val[0] == "-") {
+                    val = val.slice(1, val.length);
+                    minus = "-";
+                }
+                if (val.indexOf(".") > 0) {
+                    part = val.slice(val.indexOf("."), val.length);
+                    val = val.slice(0, val.indexOf("."));
+                }
+
+                if (arguments[1] == "4") {
+                    k = 4;
+                }
+
+                var count = val.length;
+                var index = 0;
+                for (var i = count - 1; i > 0; i--) {
+                    index++;
+                    if (index % k == 0) {
+                        var temp = val.slice(0, i) + " " + val.slice(i, val.length);
+                        val = temp;
+                    }
+                }
+                return minus + val + part;
             }
-            
-            if (arguments[1] == "4") {
-                k = 4;
-            }
-            
-            var count = val.length;
-            var index = 0;
-            for (var i = count - 1; i > 0; i--) {
-                index++;
-                if (index % k == 0) {
-                    var temp = val.slice(0, i) + " " + val.slice(i, val.length);
-                    val = temp;
-                }                
-            }            
-            return minus + val + part;
         }
 
         // Extended mode
-        function extendedMode() {            
-            var btn = getId("btn");            
+        function extendedMode() {
+            var btn = getId("btn");
             if (btn.className == "extended") {
                 btn.className = "notExtended";
                 btn.style.width = "168px";
                 btn.innerHTML = "Extended";
-                
+
                 getId("screen").style.width = "223px";
                 getId("repeatScreen").style.width = "223px";
                 getId("moveDiv").style.width = "223px";
@@ -1034,7 +1114,7 @@
                 btn.className = "extended";
                 btn.style.width = "345px";
                 btn.innerHTML = "Simply";
-                
+
                 getId("moveDiv").style.width = "458px";
                 getId("mod").style.display = "block";
                 var info = getId("info");
@@ -1058,9 +1138,9 @@
         }
 
         // This function hides the info screen.
-        function hideInfScr() {            
+        function hideInfScr() {
             var hide = getId("hide");
-            if (hide.className[hide.className.length - 1] != "|") {                
+            if (hide.className[hide.className.length - 1] != "|") {
                 getId("info").style.width = "103px";
                 getId("screen").style.width = "342px";
                 getId("repeatScreen").style.width = "342px";
@@ -1073,7 +1153,7 @@
                 getId("repeatScreen").style.width = "223px";
                 hide.innerHTML = ">>";
                 hide.className = hide.className.slice(0, hide.className.length - 2);
-            }            
+            }
         }
 
         // Add a data to fields Bin Oct Hex.
@@ -1082,8 +1162,8 @@
             getId("Bin").innerHTML = triad(+(numDec).toString(2), "4");
             getId("Oct").innerHTML = triad(+(numDec).toString(8));
             getId("Hex").innerHTML = triad(numDec.toString(16));
-        }       
- 
+        }
+
         var getId = function (id) {
             return document.getElementById(id);
         }
@@ -1092,24 +1172,52 @@
         for (var key in buttons) {
             document.querySelector("#" + key).onclick = buttons[key].onClickHandler();
         }
-        
-        // This is function for correcting existing problems with floating point.
-        function cleanUp(number) {            
-            return parseFloat((parseFloat(number).toPrecision(16)));
+
+        // This function hides buttons when incorrect data.
+        function hideBtn(val) {
+            if (val != "C") {
+                for (var key in buttons) {
+                    if (key != "C") {
+                        document.getElementById(key).disabled = true;                        
+                    }
+                }
+                document.getElementById("C").style.border = "3px solid red";
+            } else {
+                for (var key in buttons) {                 
+                        document.getElementById(key).disabled = false;                                                
+                }
+                document.getElementById("C").style.border = "2px solid #927e14";
+            }
         }
-        
+
+        // This is function for correcting existing problems with floating point.
+        function cleanUp(number) {
+            return parseFloat((parseFloat(number).toPrecision(14)));
+        }
+
         function myCleanUp(number) {
             var temp = number.toString();
-            if (temp.indexOf(".") > 0) {
-                var num = temp.slice(0, temp.indexOf("."));
-                temp = temp.slice(temp.indexOf("."), temp.length);
-                var index = temp.search(/0{8,}/);
-                if (index != -1) {
-                    return num;
+            var indexPoint = temp.indexOf(".");
+
+            if (indexPoint > 0) {
+                var num = temp.slice(0, indexPoint);
+                temp = temp.slice(indexPoint, temp.length);
+                
+                var indexCut = temp.search(/0{8,}/);                
+                if (indexCut != -1) {
+                    temp = "0" + temp.slice(0, indexCut);
+                    
+                    return cleanUp(Number(num) + Number(temp));
                 }
-                index = temp.search(/9{8,}/);
-                if (index != -1) {                    
-                    return Number(num) + Number(1);
+                indexCut = temp.search(/9{8,}/);
+                if (indexCut != -1) {
+                    temp = "0" + temp.slice(0, indexCut);
+                    if (indexCut >= 2) {
+                        return cleanUp(Number(num) + Number(temp) + 1 / Math.pow(10, indexCut - 1));
+                    }
+                    else {
+                        return cleanUp(Number(num) + Number(temp));
+                    }
                 }
             }
             return number;
@@ -1123,7 +1231,7 @@
             var self = this;
             getId("moveDiv").onmousedown = function (e) {
                 moveCalc(self, e);
-            }            
+            }
         }
 
         function moveCalc(elem, event) {
@@ -1141,8 +1249,8 @@
 
             function moveHandler(e) {
                 if (!e) e = window.event;
-                
-                elem.style.left = (e.clientX - deltaX) + "px";                
+
+                elem.style.left = (e.clientX - deltaX) + "px";
                 elem.style.top = (e.clientY - deltaY) + "px";
             }
 
