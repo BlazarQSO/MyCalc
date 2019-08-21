@@ -15,31 +15,50 @@
 
         var signPrevScr = "";           // This argument is a previous sign for correct data input.
         var rScrOperation = "";         // This argument is a writing of arithmetic operation. 
+        var screen = document.getElementById("screen");
+        var repeatScreen = document.getElementById("repeatScreen");
 
+        function attachArithmetic (e) {              
+            return () => arithmetic(this.title);
+        }
+        function attachSign (e) {            
+                return () =>  addSign(this.value)                
+        }
+        function buildAttachArithmeticFunc(operation) {
+            return function (e) {
+                return () => arithmeticFunc(this.title, operation);
+            }
+        }
+        function buildAttachArithmeticFuncDiff(operation) {
+            return function (e) {
+                return () => arithmeticFunc(this.title, operation);
+            }
+        }
+        
         // This is Array of objects buttons
         var buttons = {
 
             "result": {
                 title: "=",
-                onClickHandler: function (e) {
-                    return function () {
+                onClickHandler: function(e) {
+                    return function() {
                         if ((firstArg != undefined && signAct != "") || firstArgDiff != undefined) {
                             if (secondArg == undefined) {
-                                secondArg = getId("screen").textContent.replace(/\s/g, "");;
+                                secondArg = screen.textContent.replace(/\s/g, "");;
                             }
 
                             if (signActDiff == "") {
                                 firstArg = count(firstArg, secondArg, signAct)
-                                getId("screen").innerHTML = triad(firstArg);
+                                screen.innerHTML = triad(firstArg);
                                 binOctHex(firstArg);
                                 signTrue = 1;
                                 signMark = "=";
                             }
                             else {
                                 if (firstArg != undefined && signAct != "") {
-                                    secondArg = count(firstArgDiff, getId("screen").textContent.replace(/\s/g, ""), signActDiff);
+                                    secondArg = count(firstArgDiff, screen.textContent.replace(/\s/g, ""), signActDiff);
                                     firstArg = count(firstArg, secondArg, signAct);
-                                    getId("screen").innerHTML = triad(firstArg);
+                                    screen.innerHTML = triad(firstArg);
                                     binOctHex(firstArg);
                                     firstArgDiff = undefined;
                                     signActDiff = "";
@@ -48,14 +67,14 @@
                                 }
                                 else {
                                     firstArgDiff = count(firstArgDiff, secondArg, signActDiff)
-                                    getId("screen").innerHTML = triad(firstArgDiff);
+                                    screen.innerHTML = triad(firstArgDiff);
                                     binOctHex(firstArgDiff);
                                     signTrue = 1;
                                     signMark = "=";
                                 }
                             }
                         }
-                        getId("repeatScreen").innerHTML = "";
+                        repeatScreen.innerHTML = "";
                         signPrevScr = "";
                         rScrOperation = "";
                     };
@@ -67,109 +86,59 @@
             "b1": {
                 title: "1",
                 value: 1,
-                onClickHandler: function (e) {
-                    var self = this.value
-                    return function () {
-                        addSign(self);
-                    };
-                }
+                onClickHandler: attachSign
             },
             "b2": {
                 title: "2",
                 value: 2,
-                onClickHandler: function (e) {
-                    var self = this.value
-                    return function () {
-                        addSign(self);
-                    };
-                }
+                onClickHandler: attachSign
             },
             "b3": {
                 title: "3",
                 value: 3,
-                onClickHandler: function (e) {
-                    var self = this.value
-                    return function () {
-                        addSign(self);
-                    };
-                }
+                onClickHandler: attachSign
             },
             "b4": {
                 title: "4",
                 value: 4,
-                onClickHandler: function (e) {
-                    var self = this.value
-                    return function () {
-                        addSign(self);
-                    };
-                }
+                onClickHandler: attachSign
             },
             "b5": {
                 title: "5",
                 value: 5,
-                onClickHandler: function (e) {
-                    var self = this.value
-                    return function () {
-                        addSign(self);
-                    };
-                }
+                onClickHandler: attachSign
             },
             "b6": {
                 title: "6",
                 value: 6,
-                onClickHandler: function (e) {
-                    var self = this.value
-                    return function () {
-                        addSign(self);
-                    };
-                }
+                onClickHandler: attachSign
             },
             "b7": {
                 title: "7",
                 value: 7,
-                onClickHandler: function (e) {
-                    var self = this.value
-                    return function () {
-                        addSign(self);
-                    };
-                }
+                onClickHandler: attachSign
             },
             "b8": {
                 title: "8",
                 value: 8,
-                onClickHandler: function (e) {
-                    var self = this.value
-                    return function () {
-                        addSign(self);
-                    };
-                }
+                onClickHandler: attachSign
             },
             "b9": {
                 title: "9",
                 value: 9,
-                onClickHandler: function (e) {
-                    var self = this.value
-                    return function () {
-                        addSign(self);
-                    };
-                }
+                onClickHandler: attachSign
             },
             "b0": {
                 title: "0",
                 value: 0,
-                onClickHandler: function (e) {
-                    var self = this.value
-                    return function () {
-                        addSign(self);
-                    };
-                }
+                onClickHandler: attachSign
             },
             "dot": {
                 title: ".",
                 onClickHandler: function (e) {
                     var self = this.title
                     return function () {
-                        if (getId("screen").textContent.indexOf(".") == -1) {
+                        if (!screen.textContent.includes(".")) {
                             addSign(self);
                         }
                     };
@@ -181,13 +150,13 @@
                     return function () {
                         if (signTrue == 0 && rScrOperation == "") {
 
-                            var val = getId("screen").textContent;
+                            var val = screen.textContent;
                             val = val.replace(/\s/g, "");
                             val = val.slice(0, val.length - 1);
                             if (val != "") {
-                                getId("screen").innerHTML = triad(val);
+                                screen.innerHTML = triad(val);
                             } else {
-                                getId("screen").innerHTML = "0";
+                                screen.innerHTML = "0";
                             }
 
                             binOctHex(val);
@@ -199,8 +168,8 @@
                 title: "C",
                 onClickHandler: function (e) {
                     return function () {
-                        getId("screen").innerHTML = "0";
-                        getId("repeatScreen").innerHTML = "";
+                        screen.innerHTML = "0";
+                        repeatScreen.innerHTML = "";
                         firstArg = undefined;
                         secondArg = undefined;
                         firstArgDiff = undefined;
@@ -216,8 +185,8 @@
                     };
                 }
             },
-            "bπ": {
-                title: "π",
+            "bPi": {
+                title: "Pi",
                 value: 3.14159265358979323846,
                 onClickHandler: function (e) {
                     var self = this.value
@@ -234,39 +203,19 @@
 
             "sum": {
                 title: "+",
-                onClickHandler: function (e) {
-                    var self = this.title
-                    return function () {
-                        arithmetic(self);
-                    };
-                }
+                onClickHandler: attachArithmetic
             },
             "sub": {
                 title: "-",
-                onClickHandler: function (e) {
-                    var self = this.title
-                    return function () {
-                        arithmetic(self);
-                    };
-                }
+                onClickHandler: attachArithmetic
             },
             "mult": {
                 title: "*",
-                onClickHandler: function (e) {
-                    var self = this.title
-                    return function () {
-                        arithmetic(self);
-                    };
-                }
+                onClickHandler: attachArithmetic
             },
             "div": {
                 title: "÷",
-                onClickHandler: function (e) {
-                    var self = this.title
-                    return function () {
-                        arithmetic(self);
-                    };
-                }
+                onClickHandler: attachArithmetic
             },
 
             //#endregion
@@ -275,120 +224,55 @@
 
             "Xdeg2": {
                 title: "x^2",
-                onClickHandler: function (e) {
-                    var self = this.title;
-                    return function () {
-                        arithmeticFunc(self, "sqr");
-                    };
-                }
+                onClickHandler: buildAttachArithmeticFunc("sqr")
             },
             "Xdeg3": {
                 title: "x^3",
-                onClickHandler: function (e) {
-                    var self = this.title;
-                    return function () {
-                        arithmeticFunc(self, "cube");
-                    };
-                }
+                onClickHandler: buildAttachArithmeticFunc("cube")
             },
-            "√": {
+            "sqrt": {
                 title: "√",
-                onClickHandler: function (e) {
-                    var self = this.title;
-                    return function () {
-                        arithmeticFunc(self, "√");
-                    };
-                }
+                onClickHandler: buildAttachArithmeticFunc("√")
             },
             "b10degX": {
                 title: "10^x",
-                onClickHandler: function (e) {
-                    var self = this.title;
-                    return function () {
-                        arithmeticFunc(self, "10^");
-                    };
-                }
+                onClickHandler: buildAttachArithmeticFunc("10^")
             },
             "b1divX": {
                 title: "1/x",
-                onClickHandler: function (e) {
-                    var self = this.title;
-                    return function () {
-                        arithmeticFunc(self, "1/");
-                    };
-                }
+                onClickHandler: buildAttachArithmeticFunc("1/")
             },
             "nfactr": {
                 title: "n!",
-                onClickHandler: function (e) {
-                    var self = this.title;
-                    return function () {
-                        arithmeticFunc(self, "fact");
-                    };
-                }
+                onClickHandler: buildAttachArithmeticFunc("fact")
             },
             "log": {
                 title: "log",
-                onClickHandler: function (e) {
-                    var self = this.title;
-                    return function () {
-                        arithmeticFunc(self, "log");
-                    };
-                }
+                onClickHandler: buildAttachArithmeticFunc("log")
             },
             "ln": {
                 title: "ln",
-                onClickHandler: function (e) {
-                    var self = this.title;
-                    return function () {
-                        arithmeticFunc(self, "ln");
-                    };
-                }
+                onClickHandler: buildAttachArithmeticFunc("ln")
             },
             "edegX": {
                 title: "e^x",
-                onClickHandler: function (e) {
-                    var self = this.title;
-                    return function () {
-                        arithmeticFunc(self, "e^");
-                    };
-                }
+                onClickHandler: buildAttachArithmeticFunc("e^")
             },
             "sin": {
                 title: "sin",
-                onClickHandler: function (e) {
-                    var self = this.title;
-                    return function () {
-                        arithmeticFunc(self, "sin");
-                    };
-                }
+                onClickHandler: buildAttachArithmeticFunc("sin")
             },
             "cos": {
                 title: "cos",
-                onClickHandler: function (e) {
-                    var self = this.title;
-                    return function () {
-                        arithmeticFunc(self, "cos");
-                    };
-                }
+                onClickHandler: buildAttachArithmeticFunc("cos")
             },
             "tan": {
                 title: "tan",
-                onClickHandler: function (e) {
-                    var self = this.title;
-                    return function () {
-                        arithmeticFunc(self, "tan");
-                    };
-                }
+                onClickHandler:buildAttachArithmeticFunc("tan")
             },
             "perc": {
                 title: "%",
-                onClickHandler: function (e) {
-                    var self = this.title;
-                    return function () {
-                        arithmeticFunc(self, "%");
-                    }
-                }
+                onClickHandler: buildAttachArithmeticFunc("%")
             },
 
             //#endregion
@@ -441,12 +325,12 @@
                 onClickHandler: function (e) {
                     return function () {
                         if (memory != undefined) {
-                            getId("screen").innerHTML = triad(memory);
+                            screen.innerHTML = triad(memory);
                             binOctHex(memory);
                             if (rScrOperation != "") {
-                                var temp = getId("repeatScreen").textContent;
+                                var temp = repeatScreen.textContent;
                                 temp = temp.slice(0, temp.length - rScrOperation.length);
-                                getId("repeatScreen").innerHTML = temp;
+                                repeatScreen.innerHTML = temp;
                                 rScrOperation = "";
                             }
                             signTrue = 0;
@@ -460,10 +344,10 @@
                 onClickHandler: function (e) {
                     return function () {
                         if (memory == undefined) {
-                            memory = Number(getId("screen").textContent.replace(/\s/g, ""));
+                            memory = Number(screen.textContent.replace(/\s/g, ""));
                             getId("M").innerHTML = triad(memory);
                         } else {
-                            memory = cleanUp(Number(memory) + Number(getId("screen").textContent.replace(/\s/g, "")));
+                            memory = cleanUp(Number(memory) + Number(screen.textContent.replace(/\s/g, "")));
                             getId("M").innerHTML = triad(memory);
                         }
                     };
@@ -474,10 +358,10 @@
                 onClickHandler: function (e) {
                     return function () {
                         if (memory == undefined) {
-                            memory = cleanUp(Number(0) - Number(getId("screen").textContent.replace(/\s/g, "")));
+                            memory = cleanUp(Number(0) - Number(screen.textContent.replace(/\s/g, "")));
                             getId("M").innerHTML = triad(memory);
                         } else {
-                            memory = cleanUp(Number(memory) - Number(getId("screen").textContent.replace(/\s/g, "")));
+                            memory = cleanUp(Number(memory) - Number(screen.textContent.replace(/\s/g, "")));
                             getId("M").innerHTML = triad(memory);
                         }
                     };
@@ -487,7 +371,7 @@
                 title: "MS",
                 onClickHandler: function (e) {
                     return function () {
-                        memory = Number(getId("screen").textContent.replace(/\s/g, ""));
+                        memory = Number(screen.textContent.replace(/\s/g, ""));
                         getId("M").innerHTML = triad(memory);
                     };
                 }
@@ -495,17 +379,13 @@
             "btn": {
                 title: "btn",
                 onClickHandler: function (e) {
-                    return function () {
-                        extendedMode();
-                    }
+                    return () => extendedMode();
                 }
             },
             "hide": {
                 title: "hide",
                 onClickHandler: function (e) {
-                    return function () {
-                        hideInfScr();
-                    }
+                    return () => hideInfScr();
                 }
             },
             //#endregion
@@ -513,20 +393,20 @@
 
         // Add a sign to screen of calculator (region №1)
         function addSign(val) {
-            var temp = getId("screen").textContent.replace(/\s/g, "");
+            var temp = screen.textContent.replace(/\s/g, "");
             secondArg = undefined;
             
             if (rScrOperation != "") {
-                var t = getId("repeatScreen").textContent;
+                var t = repeatScreen.textContent;
                 t = t.slice(0, t.length - rScrOperation.length);
-                getId("repeatScreen").innerHTML = t;
+                repeatScreen.innerHTML = t;
                 rScrOperation = "";
 
                 if (val != ".") {
-                    getId("screen").innerHTML = val;
+                    screen.innerHTML = val;
                     binOctHex(triad(val));
                 } else {
-                    getId("screen").innerHTML = "0.";
+                    screen.innerHTML = "0.";
                     binOctHex(0);
                 }
                 
@@ -535,20 +415,20 @@
             }
 
             if ((temp == "0" || signTrue == 1) && val == ".") {
-                getId("screen").innerHTML = "0.";
+                screen.innerHTML = "0.";
                 signTrue = 0;
                 
                 binOctHex(0);
                 return;
             }
 
-            if (arguments[1] == "π") {
+            if (arguments[1] == "Pi") {
                 if (rScrOperation != "") {
                     temp = temp.slice(0, temp.length - rScrOperation.length);
-                    getId("repeatScreen").innerHTML = temp;
+                    repeatScreen.innerHTML = temp;
                     rScrOperation = "";
                 }
-                getId("screen").innerHTML = val;
+                screen.innerHTML = val;
                 binOctHex(val);
                 signTrue = 0;
 
@@ -558,13 +438,13 @@
             if (temp != "0" && signTrue == 0) {
                 temp = temp + val;
                 temp = temp.replace(/\s/g, "");
-                getId("screen").innerHTML = triad(temp);                
+                screen.innerHTML = triad(temp);
             } else {                
-                getId("screen").innerHTML = val;
+                screen.innerHTML = val;
             }
             signTrue = 0;
-            temp = getId("screen").textContent.replace(/\s/g, "");            
-            binOctHex(getId("screen").textContent.replace(/\s/g, ""));            
+            temp = screen.textContent.replace(/\s/g, "");
+            binOctHex(screen.textContent.replace(/\s/g, ""));
         }
 
         // These are arithmetic operations (region №2)
@@ -583,7 +463,7 @@
                 return;
             }
                      
-            var scr = getId("screen").textContent.replace(/\s/g, "");
+            var scr = screen.textContent.replace(/\s/g, "");
             
             if (firstArg == undefined || secondArg != undefined) {
                 if (signActDiff == "") {
@@ -597,7 +477,7 @@
                 else {
                     if (signTrue != 1) {
                         firstArg = count(firstArgDiff, scr, signActDiff);
-                        getId("screen").innerHTML = triad(firstArg);
+                        screen.innerHTML = triad(firstArg);
                         funRScreenSimple(scr, sign, signAct);
                         
                         signAct = sign;
@@ -625,7 +505,7 @@
                         funRScreenSimple(scr, sign, signAct);
                     }
                     firstArg = count(firstArg, scr, signAct);
-                    getId("screen").innerHTML = triad(firstArg);
+                    screen.innerHTML = triad(firstArg);
 
                     signAct = sign;
                     signTrue = 1;
@@ -644,7 +524,7 @@
                         }
 
                         funRScreenSimple(scr, sign, signAct);
-                        getId("screen").innerHTML = triad(firstArg);
+                        screen.innerHTML = triad(firstArg);
 
                         firstArgDiff = undefined;
                         signActDiff = "";
@@ -653,20 +533,20 @@
                     }
                     else {
                         funRScreenSimple(scr, sign, signAct);
-                        firstArg = getId("screen").textContent.replace(/\s/g, "");
+                        firstArg = screen.textContent.replace(/\s/g, "");
                         signAct = sign;
                         signTrue = 1;
                         rScrOperation = "";
                     }
 
-            binOctHex(getId("screen").textContent.replace(/\s/g, ""));
+            binOctHex(screen.textContent.replace(/\s/g, ""));
         }
 
         // These are arithmetic functions (region №3)
         function arithmeticFunc(func, signScr) {
-            var src = getId("screen").textContent.replace(/\s/g, "");
+            var src = screen.textContent.replace(/\s/g, "");
             var result = count(src, firstArg, func);
-            getId("screen").innerHTML = triad(result);
+            screen.innerHTML = triad(result);
             signTrue = 0;
 
             funRScreenArith(signScr, src);
@@ -683,7 +563,7 @@
                 signMark = "";
             }
 
-            var scr = getId("screen").textContent.replace(/\s/g, "");
+            var scr = screen.textContent.replace(/\s/g, "");
             if (signActDiff == "" || (signTrue == 1 && secondArg == undefined)) {
 
                 firstArgDiff = scr
@@ -700,10 +580,10 @@
                 }
 
                 if (sign == "mod" && (signAct == "*" || signAct == "÷")) {                  
-                    var temp = getId("repeatScreen").textContent;
+                    var temp = repeatScreen.textContent;
                     temp = temp.slice(0, temp.length - sign.length);
                     temp = "(" + temp + ")" + sign;
-                    getId("repeatScreen").innerHTML = temp;                
+                    repeatScreen.innerHTML = temp;
                 }          
 
                 signActDiff = sign;
@@ -717,67 +597,67 @@
                 }
 
                 firstArgDiff = count(firstArgDiff, scr, signActDiff);
-                getId("screen").innerHTML = triad(firstArgDiff);
+                screen.innerHTML = triad(firstArgDiff);
                 signActDiff = sign;
                 signTrue = 1;
             }
 
-            binOctHex(getId("screen").textContent.replace(/\s/g, ""));
+            binOctHex(screen.textContent.replace(/\s/g, ""));
         }
 
         function count(x, y, sign) {
             switch (sign) {
                 case "+": {
-                    return cleanUp(Number(x) + Number(y));
+                    return Number(x) + Number(y);
                 }
                 case "-": {
-                    return cleanUp(Number(x) - Number(y));
+                    return Number(x) - Number(y);
                 }
                 case "*": {
-                    return myCleanUp(cleanUp(Number(x) * Number(y)));
+                    return myCleanUp(Number(x) * Number(y));
                 }
                 case "÷": {
                     if (y != 0) {
-                        return myCleanUp(cleanUp(Number(x) / Number(y)));
+                        return myCleanUp(Number(x) / Number(y));
                     } else {
                         hideBtn();
                         return undefined;
                     }
                 }
                 case "x^2": {
-                    return Number(myCleanUp(cleanUp(Number(x) * Number(x))));
+                    return Number(myCleanUp(Number(x) * Number(x)));
                 }
                 case "x^3": {
-                    return myCleanUp(cleanUp(Number(x) * Number(x) * Number(x)));
+                    return myCleanUp(Number(x) * Number(x) * Number(x));
                 }
                 case "x^y": {
-                    return myCleanUp(cleanUp(Math.pow(x, y)));
+                    return myCleanUp(Math.pow(x, y));
                 }
                 case "√": {
                     if (x > 0) {
-                        return myCleanUp(cleanUp(Math.sqrt(Number(x)))); 
+                        return myCleanUp(Math.sqrt(Number(x))); 
                     } else {
                         hideBtn();
                         return undefined;
                     }                    
                 }
                 case "10^x": {
-                    return myCleanUp(cleanUp(Math.pow(10, x)));
+                    return myCleanUp(Math.pow(10, x));
                 }
                 case "1/x": {
                     if (x != 0) {
-                        return myCleanUp(cleanUp(1 / Number(x)));
+                        return myCleanUp(1 / Number(x));
                     } else {
                         hideBtn();
                         return undefined;
                     }
                 }
                 case "n!": {
-                    return myCleanUp(cleanUp(factorial(Number(x))));
+                    return myCleanUp(factorial(Number(x)));
                 }
                 case "log": {
                     if (x != 0) {
-                        return myCleanUp(cleanUp(Math.log10(x)));
+                        return myCleanUp(Math.log10(x));
                     } else {
                         hideBtn();
                         return undefined;
@@ -785,14 +665,14 @@
                 }
                 case "ln": {
                     if (x != 0) {
-                        return myCleanUp(cleanUp(Math.log(x)));
+                        return myCleanUp(Math.log(x));
                     } else {
                         hideBtn();
                         return undefined;
                     }
                 }
                 case "e^x": {
-                    return myCleanUp(cleanUp(Math.exp(x)));
+                    return myCleanUp(Math.exp(x));
                 }
                 case "sin": {
                     return trigonSin(x);
@@ -801,25 +681,25 @@
                     return trigonCos(x);
                 }
                 case "tan": {
-                    return myCleanUp(cleanUp(trigonTan(x)));
+                    return myCleanUp(trigonTan(x));
                 }
                 case "y√x": {
                     if (x < 0 && x % 2 == 1) {
-                        return myCleanUp(cleanUp(- Math.pow(-x, 1 / y)));
+                        return myCleanUp(- Math.pow(-x, 1 / y));
                     }
                     else {
-                        return myCleanUp(cleanUp(Math.pow(x, 1 / y)));
+                        return myCleanUp(Math.pow(x, 1 / y));
                     }
                 }
                 case "mod": {
-                    return myCleanUp(cleanUp((x % y)));
+                    return myCleanUp(x % y);
                 }
                 case "%": {
                     if (y == undefined) {
                         y = x;
                         firstArg = x;
                     }
-                    return myCleanUp(cleanUp(y * x / 100));
+                    return myCleanUp(y * x / 100);
                 }
             }
         }
@@ -919,12 +799,12 @@
             }
 
             if ((sign == "*" || sign == "÷") && (signPrev == "+" || signPrev == "-")) {
-                var temp = "(" + getId("repeatScreen").textContent + val + ")" + sign;
-                getId("repeatScreen").innerHTML = temp;
+                var temp = "(" + repeatScreen.textContent + val + ")" + sign;
+                repeatScreen.innerHTML = temp;
                 signPrevScr = ")";
             }
             else {
-                getId("repeatScreen").innerHTML += val + sign;
+                repeatScreen.innerHTML += val + sign;
                 signPrevScr = signPrev;
             }
         }
@@ -935,23 +815,23 @@
                 count = 3;
             }
             
-            var temp = getId("repeatScreen").textContent;
+            var temp = repeatScreen.textContent;
             if (signTrue == 1 && signActDiff != "" && temp[temp.length - count - 1] == ")") {
                 if (change == "*" || change == "÷") {
                     temp = temp.slice(0, temp.length - count) + change;
-                    getId("repeatScreen").innerHTML = temp;            
+                    repeatScreen.innerHTML = temp;            
                 } else {
                     temp = temp.slice(1, temp.length - count - 1) + change;
-                    getId("repeatScreen").innerHTML = temp;                    
+                    repeatScreen.innerHTML = temp;                    
                 }
                 return;
             } else if (signTrue == 1 && signActDiff != "") {
                 if (change == "*" || change == "÷") {
                     temp = "(" + temp.slice(0, temp.length - count) + ")" + change;
-                    getId("repeatScreen").innerHTML = temp;                    
+                    repeatScreen.innerHTML = temp;                    
                 } else {
                     temp = temp.slice(0, temp.length - count) + change;
-                    getId("repeatScreen").innerHTML = temp;                    
+                    repeatScreen.innerHTML = temp;                    
                 }
                 return;
             }
@@ -962,13 +842,13 @@
                 } else {
                     temp = temp.slice(0, temp.length - count) + change;
                 }
-                getId("repeatScreen").innerHTML = temp;
+                repeatScreen.innerHTML = temp;
                 signPrevScr = ")";                
             }
             else
                 if (signPrevScr == ")" && (symbol == "*" || symbol == "÷") && (change == "+" || change == "-")) {
                     temp = temp.slice(1, temp.length - count - 1) + change;
-                    getId("repeatScreen").innerHTML = temp;                    
+                    repeatScreen.innerHTML = temp;                    
                 }
                 else
                     if ((symbol == "+" || symbol == "-") && (change == "*" || change == "÷") && signPrevScr == ")") {
@@ -977,23 +857,23 @@
                         } else {
                             temp = temp.slice(0, temp.length - count) + change;
                         }
-                        getId("repeatScreen").innerHTML = temp;
+                        repeatScreen.innerHTML = temp;
                     }
                     else {
                         if ((change == "+" || change == "-") && (symbol == "*" || symbol == "÷")
                             && temp[temp.length - 2] != "}" && temp[temp.length - 2] == ")") {
                             temp = temp.slice(1, temp.length - count - 1) + change;                            
-                            getId("repeatScreen").innerHTML = temp;                            
+                            repeatScreen.innerHTML = temp;                            
                         }
                         else {
                             temp = temp.slice(0, temp.length - count) + change;
-                            getId("repeatScreen").innerHTML = temp;
+                            repeatScreen.innerHTML = temp;
                         }
                     }
         }
 
         function funRScreenDiff(val, change, signPrev) {
-            var temp = getId("repeatScreen").textContent;
+            var temp = repeatScreen.textContent;
             var count = 1;
             if (signActDiff == "mod" || signActDiff == "y√x") {
                 count = 3;
@@ -1005,12 +885,12 @@
                 } else if (temp != "") {
                     temp = temp.slice(0, temp.length - 1) + change;
                 } else if (temp == "") {
-                    temp = getId("screen").textContent + change;
+                    temp = screen.textContent + change;
                 }
             } else {
                 temp = temp.slice(0, temp.length - count) + change;
             }
-            getId("repeatScreen").innerHTML = temp;
+            repeatScreen.innerHTML = temp;
         }
 
         function funRScreenArith(symbol, x) {
@@ -1020,26 +900,26 @@
 
             if (symbol == "%") {
                 if (rScrOperation == "") {
-                    getId("repeatScreen").innerHTML += x + symbol + "{" + firstArg + "}";
+                    repeatScreen.innerHTML += x + symbol + "{" + firstArg + "}";
                     rScrOperation = x + symbol + "{" + firstArg + "}";
                 }
                 else {
-                    var temp = getId("repeatScreen").textContent;
+                    var temp = repeatScreen.textContent;
                     temp = temp.slice(0, temp.length - rScrOperation.length);
-                    getId("repeatScreen").innerHTML = temp + x + symbol + "{" + firstArg + "}";
+                    repeatScreen.innerHTML = temp + x + symbol + "{" + firstArg + "}";
                     rScrOperation = x + symbol + "{" + firstArg + "}";
                 }
                 return;
             }
 
             if (rScrOperation == "") {
-                getId("repeatScreen").innerHTML += symbol + "{" + x + "}";
+                repeatScreen.innerHTML += symbol + "{" + x + "}";
                 rScrOperation = symbol + "{" + x + "}";
             }
             else {
-                var temp = getId("repeatScreen").textContent;
+                var temp = repeatScreen.textContent;
                 temp = temp.slice(0, temp.length - rScrOperation.length);
-                getId("repeatScreen").innerHTML = temp + symbol + "{" + rScrOperation + "}";
+                repeatScreen.innerHTML = temp + symbol + "{" + rScrOperation + "}";
                 rScrOperation = symbol + "{" + rScrOperation + "}";
             }
         }
@@ -1092,8 +972,8 @@
                 btn.style.width = "168px";
                 btn.innerHTML = "Extended";
 
-                getId("screen").style.width = "223px";
-                getId("repeatScreen").style.width = "223px";
+                screen.style.width = "223px";
+                repeatScreen.style.width = "223px";
                 getId("moveDiv").style.width = "223px";
                 getId("mod").style.display = "none";
                 var info = getId("info");
@@ -1142,15 +1022,15 @@
             var hide = getId("hide");
             if (hide.className[hide.className.length - 1] != "|") {
                 getId("info").style.width = "103px";
-                getId("screen").style.width = "342px";
-                getId("repeatScreen").style.width = "342px";
+                screen.style.width = "342px";
+                repeatScreen.style.width = "342px";
                 hide.innerHTML = "<<";
                 hide.className = hide.className + " |";
             }
             else {
                 getId("info").style.width = "222px";
-                getId("screen").style.width = "223px";
-                getId("repeatScreen").style.width = "223px";
+                screen.style.width = "223px";
+                repeatScreen.style.width = "223px";
                 hide.innerHTML = ">>";
                 hide.className = hide.className.slice(0, hide.className.length - 2);
             }
@@ -1167,7 +1047,7 @@
         var getId = function (id) {
             return document.getElementById(id);
         }
-
+                
         // This is binding handlers to buttons.
         for (var key in buttons) {
             document.querySelector("#" + key).onclick = buttons[key].onClickHandler();
